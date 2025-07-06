@@ -22,9 +22,9 @@ function setCSSVariable(variable: string, value: string) {
 <template>
   <div class="container my-3">
 
-    <h1>Customize</h1>
+  <h1 class="mb-3">Customize</h1>
 
-  <ul class="list-group my-5">
+  <ul class="list-group mb-3">
     <li class="list-group-item" v-for="(_, key) in bsVariables" :key="key">
       <span>{{ key }}: </span>
       <input v-model="bsVariables[key].value" type="color" class="form-control form-control-color d-inline">

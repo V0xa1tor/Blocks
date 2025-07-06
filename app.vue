@@ -1,5 +1,5 @@
 <script setup lang="ts">
-onNuxtReady(async () => {
+onMounted(async () => {
   const bootstrap = await import("bootstrap");
 });
 </script>
@@ -13,9 +13,6 @@ onNuxtReady(async () => {
 </template>
 
 <style>
-@import "bootstrap";
-@import "bootstrap-icons/font/bootstrap-icons";
-
 html, body, #__nuxt {
   width: 100vw;
   height: 100vh;

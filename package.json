@@ -4,22 +4,29 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --host '0.0.0.0'",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.11.1",
     "@popperjs/core": "^2.11.8",
+    "@types/downloadjs": "^1.4.6",
+    "@types/sortablejs": "^1.15.8",
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
+    "dexie": "^4.0.11",
+    "dexie-export-import": "^4.1.4",
+    "downloadjs": "^1.4.7",
     "nuxt": "^3.17.5",
+    "pinia": "^3.0.3",
+    "sortablejs": "^1.15.6",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.10",
-    "@types/splitpanes": "^2.2.6",
     "typescript": "^5.8.3",
     "vue-tsc": "^2.2.10"
   }
