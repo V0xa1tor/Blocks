@@ -5,7 +5,7 @@ const actionMenu = useActionMenuStore();
 
 import Sortable from "sortablejs";
 onMounted(() => {
-  const sortable = Sortable.create(document.getElementById("action-menu")!, {
+  const sortable = Sortable.create(document.getElementById("action-menu-settings")!, {
     animation: 150,
     handle: ".move-handler"
   });
@@ -18,7 +18,7 @@ onMounted(() => {
 
     <h1 class="mb-3">Configurações</h1>
 
-    <ol id="action-menu" class="list-group">
+    <ol id="action-menu-settings" class="list-group">
       <li v-for="item in actionMenu.items" class="p-2 d-flex justify-content-between" :class="{ 'list-group-item': item.type != 'divider' }">
         <div v-if="item.type == 'action'" class="w-100 d-flex justify-content-between align-items-center">
           <div class="d-flex align-items-center">

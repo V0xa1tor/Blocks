@@ -1,7 +1,7 @@
 <template>
   <div class="h-100 d-flex">
-    <ActionMenu />
-    <div class="vr"></div>
+    <VerticalActionMenu />
+    <div class="vr" style="color: var(--bs-border-color); opacity: 1;"></div>
     <div class="overflow-auto w-100 h-100">
       <slot></slot>
     </div>

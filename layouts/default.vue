@@ -3,7 +3,9 @@
     <div class="overflow-auto w-100 h-100">
       <slot></slot>
     </div>
-    <hr class="m-0">
-    <ActionMenu />
+    <div class="sticky-bottom">
+      <hr class="m-0" style="color: var(--bs-border-color); opacity: 1;">
+      <HorizontalActionMenu />
+    </div>
   </div>
 </template>

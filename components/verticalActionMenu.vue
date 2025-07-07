@@ -3,10 +3,10 @@ import Sortable from "sortablejs";
 import { useActionMenuStore } from "~/stores/actionMenu";
 
 const actionMenu = useActionMenuStore();
-const viewport = useViewportStore();
 
 onMounted(() => {
   const sortable = Sortable.create(document.getElementById("action-menu")!, {
+    direction: "vertical",
     animation: 150,
     delay: 500,
     delayOnTouchOnly: true
@@ -17,22 +17,16 @@ onMounted(() => {
 
 <template>
   <div id="action-menu"
-    class="flex-grow-0 p-2 gap-2 overflow-auto"
-    :class="{ 'hstack': viewport.isPortrait, 'vstack': viewport.isLandscape }"
+    class="vstack flex-grow-0 p-3 gap-3 overflow-auto"
   >
-    <div v-for="item in actionMenu.items"
-      :class="{ 'h-100': viewport.isPortrait, 'w-100': viewport.isLandscape }"
-    >
+    <div v-for="item in actionMenu.items" class="w-100">
       <button v-if="item.type == 'action'"
-        class="btn btn-outline-secondary fs-4 p-1"
+        class="btn fs-4 p-1"
         @click="navigateTo(item.action.to)"
       >
-        <i :class="`bi ${item.icon}`"></i>
+        <i :class="`bi ${item.icon} fs-2`"></i>
       </button>
-      <div v-if="item.type == 'divider'" class="w-100 h-100">
-        <div v-if="viewport.isPortrait" class="vr mx-2 h-100"></div>
-        <hr v-else-if="viewport.isLandscape" class="my-2 w-100">
-      </div>
+      <hr v-if="item.type == 'divider'" class="my-2 w-100" style="color: var(--bs-border-color); opacity: 1;">
     </div>
   </div>
 </template>
