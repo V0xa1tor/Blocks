@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100 d-flex flex-column">
+  <div class="overflow-auto h-100 d-flex flex-column">
     <div class="overflow-auto w-100 h-100">
       <slot></slot>
     </div>

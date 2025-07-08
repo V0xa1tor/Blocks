@@ -68,7 +68,9 @@ onMounted(async () => {
 
       <div class="card">
         <div class="card-body">
+
           <canvas v-show="estimate" id="storage-chart"></canvas>
+
           <div v-if="!estimate">
             <h2 class="text-danger">Estimativa não suportada</h2>
             <p>Motivos prováveis:</p>

@@ -18,12 +18,14 @@ onNuxtReady(async () => {
 
 <template>
   <div v-if="loading"
-    class="position-fixed bg-body vw-100 vh-100 d-flex justify-content-center align-items-center"
+    class="position-fixed bg-body w-100 h-100 d-flex justify-content-center align-items-center"
     style="z-index: 9999;"
   >
     <Loading />
   </div>
-  <div class="h-100">
+  <div class="vstack h-100">
+    <TopBar />
+    <Offcanvas />
     <NuxtLayout :name="viewport.isLandscape ? 'landscape' : 'default'" >
       <NuxtPage />
     </NuxtLayout>
