@@ -37,6 +37,6 @@ i, i::before {
 }
 
 .sortable-ghost {
-  visibility: hidden;
+  opacity: 0;
 }
 </style>

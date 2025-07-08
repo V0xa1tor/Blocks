@@ -26,7 +26,7 @@ onMounted(() => {
           class="btn fs-4 p-1"
           @click="navigateTo(item.action.to)"
         >
-          <i :class="`bi ${item.icon}`" style="font-size: 2rem;"></i>
+          <i :class="`bi ${item.icon}`"></i>
         </button>
         <div v-if="item.type == 'divider'" class="vr mx-2 d-block" style="color: var(--bs-border-color); opacity: 1;"></div>
       </div>
@@ -40,6 +40,6 @@ i, i::before {
 }
 
 .sortable-ghost {
-  visibility: hidden;
+  opacity: 0;
 }
 </style>

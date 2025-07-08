@@ -24,9 +24,9 @@ onNuxtReady(async () => {
     <Loading />
   </div>
   <div class="vstack h-100">
-    <TopBar />
     <Offcanvas />
     <NuxtLayout :name="viewport.isLandscape ? 'landscape' : 'default'" >
+      <TopBar />
       <NuxtPage />
     </NuxtLayout>
   </div>
