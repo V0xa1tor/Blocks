@@ -44,7 +44,10 @@ export default defineNuxtConfig({
         }
       ],
     },
-    registerType: 'autoUpdate'
+    registerType: 'autoUpdate',
+    workbox: {
+      navigateFallback: '/'
+    }
   },
 
   modules: ["@pinia/nuxt", "@vite-pwa/nuxt"]
