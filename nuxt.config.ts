@@ -19,5 +19,33 @@ export default defineNuxtConfig({
     }
   },
 
-  modules: ["@pinia/nuxt"]
+  pwa: {
+    manifest: {
+      name: 'Bloctopus',
+      short_name: 'Bloctopus',
+      description: 'Block and octopus',
+      theme_color: '#000000',
+      background_color: "#000000",
+      icons: [
+        {
+          src: '/favicon.svg',
+          sizes: 'any',
+          type: 'image/svg+xml',
+        },
+        {
+          src: '/favicon_192x192.png',
+          sizes: '192x192',
+          type: 'image/png'
+        },
+        {
+          src: '/favicon_512x512.png',
+          sizes: '512x512',
+          type: 'image/png'
+        }
+      ],
+    },
+    registerType: 'autoUpdate'
+  },
+
+  modules: ["@pinia/nuxt", "@vite-pwa/nuxt"]
 });

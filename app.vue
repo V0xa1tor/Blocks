@@ -17,12 +17,16 @@ onNuxtReady(async () => {
 </script>
 
 <template>
+
+  <NuxtPwaManifest />
+
   <div v-if="loading"
     class="position-fixed bg-body w-100 h-100 d-flex justify-content-center align-items-center"
     style="z-index: 9999;"
   >
     <Loading />
   </div>
+
   <div class="vstack h-100">
     <Offcanvas />
     <NuxtLayout :name="viewport.isLandscape ? 'landscape' : 'default'" >
@@ -30,6 +34,7 @@ onNuxtReady(async () => {
       <NuxtPage />
     </NuxtLayout>
   </div>
+  
 </template>
 
 <style>
