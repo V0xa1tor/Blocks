@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     head: {
       title: "Bloctopus",
       link: [
-        { rel: "icon", href: "/favicon.svg" }
+        { rel: "icon", href: "/bloctopus.svg" }
       ],
       script: [
         { src: "/auto-theme.js" }
