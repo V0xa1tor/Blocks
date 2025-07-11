@@ -28,17 +28,17 @@ export default defineNuxtConfig({
       background_color: "#000000",
       icons: [
         {
-          src: '/favicon.svg',
+          src: '/bloctopus.svg',
           sizes: 'any',
           type: 'image/svg+xml',
         },
         {
-          src: '/favicon_192x192.png',
+          src: '/bloctopus_192x192.png',
           sizes: '192x192',
           type: 'image/png'
         },
         {
-          src: '/favicon_512x512.png',
+          src: '/bloctopus_512x512.png',
           sizes: '512x512',
           type: 'image/png'
         }
