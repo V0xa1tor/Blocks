@@ -63,29 +63,29 @@ function deleteDatabase(db: Database) {
 </script>
 
 <template>
-  <div class="container my-3">
+  <div class="container vstack gap-3 my-3">
 
     <h1 class="mb-3">Bancos de dados</h1>
 
-    <div class="card border-primary" v-for="db in dbs.databases">
+    <div v-if="dbs.openedDb" class="card border-primary">
       <div class="card-body">
 
         <div class="d-flex justify-content-between">
-          <h2>{{ db.name }}</h2>
+          <h2>{{ dbs.openedDb.name }}</h2>
           <div class="dropdown">
             <button class="btn p-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-three-dots"></i>
             </button>
             <ul class="dropdown-menu">
               <li><button class="dropdown-item" disabled>Renomear</button></li>
-              <li><button class="dropdown-item" @click="exportDatabase(db)">Exportar</button></li>
+              <li><button class="dropdown-item" @click="exportDatabase(dbs.openedDb)">Exportar</button></li>
               <li><hr class="dropdown-divider"></li>
-              <li><button class="dropdown-item text-danger" @click="deleteDatabase(db)">Excluir</button></li>
+              <li><button class="dropdown-item text-danger" @click="deleteDatabase(dbs.openedDb)">Excluir</button></li>
             </ul>
           </div>
         </div>
         
-        <small class="text-secondary">Version {{ db.verno }}</small>
+        <small class="text-secondary">Version {{ dbs.openedDb.verno }}</small>
         
       </div>
     </div>
