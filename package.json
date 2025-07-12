@@ -15,6 +15,7 @@
     "@types/downloadjs": "^1.4.6",
     "@types/sortablejs": "^1.15.8",
     "@vite-pwa/nuxt": "^1.0.4",
+    "@vueuse/rxjs": "^13.5.0",
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
     "chart.js": "^4.5.0",
@@ -23,7 +24,9 @@
     "downloadjs": "^1.4.7",
     "nuxt": "^3.17.5",
     "pinia": "^3.0.3",
+    "rxjs": "^7.8.2",
     "sortablejs": "^1.15.6",
+    "uuid": "^11.1.0",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
   },

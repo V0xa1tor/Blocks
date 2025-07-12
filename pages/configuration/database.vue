@@ -42,9 +42,22 @@ async function exportDatabase(db: Database) {
   }
 }
 
+async function importDatabase(files: FileList | null) {
+  if (files !== null) {
+    const dexieExportImport = await import("dexie-export-import");
+    [...files].forEach((file) => {
+      dexieExportImport.importDB(file).then((db) => {
+        db.close();
+        dbs.loadDatabases();
+      });
+    });
+  }
+}
+
 function deleteDatabase(db: Database) {
-  db.delete();
-  dbs.loadDatabases();
+  db.delete().then(() => {
+    dbs.loadDatabases();
+  });
 }
 
 </script>
@@ -54,9 +67,33 @@ function deleteDatabase(db: Database) {
 
     <h1 class="mb-3">Bancos de dados</h1>
 
+    <div class="card border-primary" v-for="db in dbs.databases">
+      <div class="card-body">
+
+        <div class="d-flex justify-content-between">
+          <h2>{{ db.name }}</h2>
+          <div class="dropdown">
+            <button class="btn p-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-three-dots"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li><button class="dropdown-item" disabled>Renomear</button></li>
+              <li><button class="dropdown-item" @click="exportDatabase(db)">Exportar</button></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item text-danger" @click="deleteDatabase(db)">Excluir</button></li>
+            </ul>
+          </div>
+        </div>
+        
+        <small class="text-secondary">Version {{ db.verno }}</small>
+        
+      </div>
+    </div>
+
     <div class="hstack gap-3 justify-content-end flex-wrap mb-3">
       <button class="btn btn-outline-primary hstack gap-2" data-bs-toggle="modal" data-bs-target="#newDatabaseModal"><i class="bi bi-plus-lg"></i>Novo banco</button>
-      <button class="btn btn-outline-primary hstack gap-2"><i class="bi bi-download"></i>Importar banco</button>
+      <label class="btn btn-outline-primary hstack gap-2" for="import"><i class="bi bi-download"></i>Importar banco</label>
+      <input class="d-none" @change="(e) => importDatabase((e.target as HTMLInputElement).files)" type="file" multiple id="import">
     </div>
 
     <div class="vstack gap-3 mb-3">

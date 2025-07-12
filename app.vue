@@ -4,7 +4,7 @@ const loading = ref(true);
 
 const viewport = useViewportStore();
 
-onNuxtReady(async () => {
+onMounted(async () => {
   const bootstrap = await import("bootstrap");
 
   viewport.updateWindowSize();
@@ -28,8 +28,8 @@ onNuxtReady(async () => {
   </div>
 
   <div class="vstack h-100">
-    <Offcanvas />
     <NuxtLayout :name="viewport.isLandscape ? 'landscape' : 'default'" >
+      <Offcanvas />
       <TopBar />
       <NuxtPage />
     </NuxtLayout>

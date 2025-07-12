@@ -1,9 +1,8 @@
 <template>
-  <div class="container my-3">
+  <div contenteditable class="p-3 pb-5 vstack" style="outline: none;">
 
-    <h1 class="mb-3">Editor de texto</h1>
-
-    <textarea class="form-control">Hello, world!</textarea>
+    <h1 class="mb-3">Título</h1>
+    <div>Hello, world!</div>
 
   </div>
 </template>

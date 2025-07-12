@@ -66,18 +66,22 @@ onMounted(async () => {
 
     <div class="vstack gap-3">
 
-      <div class="card">
-        <div class="card-body">
-
-          <canvas v-show="estimate" id="storage-chart"></canvas>
-
-          <div v-if="!estimate">
-            <h2 class="text-danger">Estimativa não suportada</h2>
-            <p>Motivos prováveis:</p>
-            <ul>
-              <li>Você está em um contexto não seguro (HTTP)</li>
-              <li>Seu navegador não suporta o Storage</li>
-            </ul>
+      <div class="row">
+        <div class="col-12 col-sm-6">
+          <div class="card">
+            <div class="card-body">
+    
+              <canvas v-show="estimate" id="storage-chart"></canvas>
+    
+              <div v-if="!estimate">
+                <h2 class="text-danger">Estimativa não suportada</h2>
+                <p>Motivos prováveis:</p>
+                <ul>
+                  <li>Você está em um contexto não seguro (HTTP)</li>
+                  <li>Seu navegador não suporta o Storage</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>

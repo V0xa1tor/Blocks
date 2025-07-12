@@ -3,18 +3,21 @@ import Database, { type Block, type Setting } from '~/utils/database';
 
 export const useDatabaseStore = defineStore('database', {
   state: () => ({
+    openedDb: {} as Database,
     databases: [] as Database[],
     version: 1
   }),
 
   actions: {
     async loadDatabases() {
-      Database.getDatabaseNames().then(async names => {
+      await Database.getDatabaseNames().then(async names => {
         this.databases = await Promise.all(names.map(async name => {
           const db = new Database(name, { autoOpen: false });
           return db;
         }));
       });
+      this.openedDb = this.databases[0];
+      if (this.openedDb) await this.openedDb.open();
     },
 
     async createDatabase(name: string) {

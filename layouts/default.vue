@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-auto h-100 d-flex flex-column">
-    <div class="overflow-auto w-100 h-100">
+    <div class="overflow-auto w-100 h-100 vstack">
       <slot></slot>
     </div>
     <div class="sticky-bottom">
