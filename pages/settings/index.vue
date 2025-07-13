@@ -1,0 +1,35 @@
+<script setup lang="ts">
+const pages = [
+  { icon: "bi-database", title: "Bancos de dados", link: "/settings/database" },
+  { icon: "bi-archive", title: "Espaço utilizado", link: "/settings/storage" },
+  { icon: "bi-palette", title: "Customização", link: "/settings/customization" },
+  { icon: "bi-lightning-charge", title: "Menu de ações", link: "/settings/actions" }
+];
+</script>
+
+<template>
+  <div class="container vstack gap-3 my-3">
+
+    <h1>Configurações</h1>
+    
+    <div class="list-group">
+      <button v-for="page in pages" type="button"
+        class="list-group-item list-group-item-action hstack gap-3 justify-content-between"
+        @click="navigateTo(page.link)"
+      >
+        <div class="hstack gap-2">
+          <i :class="`bi ${page.icon}`"></i>
+          <div>{{ page.title }}</div>
+        </div>
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+
+  </div>
+</template>
+
+<style scoped>
+i, i::before {
+  display: block;
+}
+</style>

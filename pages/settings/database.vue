@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import Database from '~/utils/database';
-import { useDatabaseStore } from '~/stores/databaseStore';
+import { Database } from '~/models/Database';
+import { useDatabasesStore } from '~/stores/databases.store';
 import download from 'downloadjs';
 import type { Modal } from 'bootstrap';
 
-const dbs = useDatabaseStore();
+const dbs = useDatabasesStore();
 const newDatabaseName = ref('');
 let newDatabaseModal: Modal;
 
@@ -32,26 +32,12 @@ async function createNewDatabase(name: string) {
 }
 
 async function exportDatabase(db: Database) {
-  try {
-    await db.open();
-    const blob = await db.export({ prettyJson: true, noTransaction: true});
-    db.close();
-    download(blob, `${db.name}.json`, "application/json");
-  } catch (error) {
-    console.error('Error: ' + error);
-  }
+  const blob = await dbs.exportDatabase(db);
+  download(blob, `${db.name}.json`, "application/json");
 }
 
 async function importDatabase(files: FileList | null) {
-  if (files !== null) {
-    const dexieExportImport = await import("dexie-export-import");
-    [...files].forEach((file) => {
-      dexieExportImport.importDB(file).then((db) => {
-        db.close();
-        dbs.loadDatabases();
-      });
-    });
-  }
+  await dbs.importDatabase(files);
 }
 
 function deleteDatabase(db: Database) {
@@ -90,14 +76,14 @@ function deleteDatabase(db: Database) {
       </div>
     </div>
 
-    <div class="hstack gap-3 justify-content-end flex-wrap mb-3">
+    <div class="hstack gap-3 justify-content-end flex-wrap">
       <button class="btn btn-outline-primary hstack gap-2" data-bs-toggle="modal" data-bs-target="#newDatabaseModal"><i class="bi bi-plus-lg"></i>Novo banco</button>
       <label class="btn btn-outline-primary hstack gap-2" for="import"><i class="bi bi-download"></i>Importar banco</label>
       <input class="d-none" @change="(e) => importDatabase((e.target as HTMLInputElement).files)" type="file" multiple id="import">
     </div>
 
     <div class="vstack gap-3 mb-3">
-      <Loading v-if="!dbs.databases.length" />
+      <Loading v-if="!dbs.databases?.length" />
       <div class="card" v-for="db in dbs.databases">
         <div class="card-body">
 
@@ -141,7 +127,7 @@ function deleteDatabase(db: Database) {
             </div>
           </div>
           <div class="modal-footer justify-content-between">
-            <small class="text-secondary text-end">Versão {{ dbs.version }}</small>
+            <small class="text-secondary text-end">Versão {{ Database.v }}</small>
             <div class="flex-grow-1 text-end">
               <button type="button" class="btn" data-bs-dismiss="modal">Cancelar</button>
               <button type="button" class="btn btn-primary" @click="createNewDatabase(newDatabaseName)">Criar banco</button>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 const loading = ref(true);
-
 const viewport = useViewportStore();
 
 onMounted(async () => {
@@ -9,6 +8,8 @@ onMounted(async () => {
 
   viewport.updateWindowSize();
   window.addEventListener('resize', viewport.updateWindowSize);
+
+  await useDatabasesStore().loadDatabases();
 
   await sleep(200);
   loading.value = false;
