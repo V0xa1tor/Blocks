@@ -10,8 +10,11 @@ watch(block, async (newBlock) => {
 }, { deep: true });
 
 onMounted(() => {
-  (document.getElementById("page-title") as HTMLInputElement)!.value = block.value?.content.title ?? '';
-  (document.getElementById("page-text") as HTMLInputElement)!.value = block.value?.content.text ?? '';
+  const pageTitle = document.getElementById("page-title") as HTMLInputElement;
+  const pageText = document.getElementById("page-text") as HTMLInputElement;
+  pageTitle!.value = block.value?.content.title ?? '';
+  pageText!.value = block.value?.content.text ?? '';
+  pageText.focus();
 });
 </script>
 
@@ -26,8 +29,8 @@ onMounted(() => {
       </ol>
     </nav> -->
 
-    <input type="text" class="form-control p-0 border-0 fs-1 mb-3" placeholder="Título..." style="outline: none;" @input="(e) => block!.content.title = (e.target as HTMLInputElement).value" id="page-title" />
-    <textarea placeholder="Escreva aqui..." class="form-control p-0 border-0 h-100 pb-5" style="outline: none;" @input="(e) => block!.content.text = (e.target as HTMLInputElement).value" id="page-text"></textarea>
+    <input placeholder="Título..." type="text" class="form-control shadow-none p-0 border-0 rounded-0 fs-1 mb-3" @input="(e) => block!.content.title = (e.target as HTMLInputElement).value" id="page-title" />
+    <textarea placeholder="Escreva aqui..." class="form-control shadow-none flex-grow-1 p-0 border-0 rounded-0 pb-5" style="resize: none;" @input="(e) => block!.content.text = (e.target as HTMLInputElement).value" id="page-text"></textarea>
 
   </div>
 </template>

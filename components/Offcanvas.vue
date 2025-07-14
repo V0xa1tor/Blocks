@@ -1,17 +1,22 @@
 <script setup lang="ts">
 import Sortable from "sortablejs";
-import { useBlocksStore } from "~/stores/blocks.store";
 
 const blocksStore = useBlocksStore();
 
 onMounted(async () => {
-  const sortable = Sortable.create(document.getElementById("blocks")!, {
+  const sortable = Sortable.create(document.getElementById("offcanvas-blocks")!, {
     direction: "vertical",
     animation: 150,
     delay: 500,
     delayOnTouchOnly: true
   });
 });
+
+async function hideOffcanvas() {
+  const { Offcanvas } = await import("bootstrap");
+  const bsOffcanvas = Offcanvas.getInstance("#offcanvas")!;
+  bsOffcanvas.hide();
+}
 
 </script>
 
@@ -23,18 +28,18 @@ onMounted(async () => {
     </div>
     <div class="offcanvas-body vstack gap-3">
 
-      <div id="blocks" class="vstack gap-1">
+      <div id="offcanvas-blocks" class="vstack gap-1">
         <div class="hstack rounded-2" v-for="block in blocksStore.blocks">
           <button
             class="btn border-0 p-1 flex-grow-1 text-start"
-            @click="navigateTo(`/block/${block.id}`)"
+            @click="() => { navigateTo(`/block/${block.id}`); hideOffcanvas(); }"
           >
             {{ block.content.title }}
           </button>
           <div class="dropdown">
             <button class="btn border-0 p-2" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></button>
             <ul class="dropdown-menu">
-              <li><button class="dropdown-item">Renomear</button></li>
+              <li><button class="dropdown-item" disabled>Renomear</button></li>
               <li><hr class="dropdown-divider"></li>
               <li><button @click="blocksStore.deleteBlock(block.id!)" class="dropdown-item text-danger">Excluir</button></li>
             </ul>
@@ -47,7 +52,7 @@ onMounted(async () => {
     <div class="p-3">
       <button
         class="btn btn-outline-primary hstack gap-2 p-1 w-100 justify-content-center"
-        @click="blocksStore.addBlock('Página nova', '')"
+        @click="blocksStore.addBlock(`Página nova (${blocksStore.blocks.length})`, '')"
       >
         <i class="bi bi-plus-lg"></i>Novo bloco
       </button>
@@ -65,11 +70,7 @@ i, i::before {
   opacity: 0;
 }
 
-#blocks > div:hover {
+#offcanvas-blocks > div:hover {
   background-color: var(--bs-tertiary-bg);
-}
-
-.offcanvas-backdrop.show {
-  opacity: 1;
 }
 </style>

@@ -1,9 +1,9 @@
 export const useActionMenuStore = defineStore('actionMenu', () => {
 
   const items = ref<(action | divider)[]>([
-    { type: "action", name: "Texto", icon: "bi-fonts", action: { type: "link", to: "/" } },
+    { type: "action", name: "Página inicial", icon: "bi-house", action: { type: "link", to: "/" } },
     { type: "divider" },
-    { type: "action", name: "Configuração", icon: "bi-gear", action: { type: "link", to: "/settings" } }
+    { type: "action", name: "Configurações", icon: "bi-gear", action: { type: "link", to: "/settings" } }
   ]);
 
   return { items };
