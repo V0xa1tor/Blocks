@@ -1,26 +1,48 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: false },
+  ssr: false,
+  nitro: {
+    preset: 'static'
+  },
 
   css: [
     "bootstrap/dist/css/bootstrap.css",
-    "bootstrap-icons/font/bootstrap-icons.css"
+    "~/assets/bootstrap-icons.css"
   ],
 
   app: {
     head: {
       title: "Bloctopus",
       link: [
-        { rel: "icon", href: "/bloctopus.svg" }
+        { rel: "icon", href: "/bloctopus.svg" },
+        {
+          rel: 'preload',
+          href: '/fonts/bootstrap-icons.woff2',
+          as: 'font',
+          type: 'font/woff2',
+          crossorigin: 'anonymous'
+        },
+        {
+          rel: 'preload',
+          href: '/fonts/bootstrap-icons.woff',
+          as: 'font',
+          type: 'font/woff',
+          crossorigin: 'anonymous'
+        }
       ],
       script: [{ src: "/theme.js" }]
     }
   },
 
   pwa: {
+    includeAssets: [
+      '/fonts/*'
+    ],
     manifest: {
       name: 'Bloctopus',
       short_name: 'Bloctopus',
+      start_url: '/',
       description: 'Block and octopus',
       theme_color: '#000000',
       background_color: "#000000",
@@ -44,7 +66,8 @@ export default defineNuxtConfig({
     },
     registerType: 'autoUpdate',
     workbox: {
-      navigateFallback: '/'
+      navigateFallback: '/',
+      globPatterns: ['**/*']
     }
   },
 

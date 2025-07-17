@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import * as bootstrap from "bootstrap";
 import Sortable from "sortablejs";
 
 const blocksStore = useBlocksStore();
@@ -13,7 +14,7 @@ onMounted(async () => {
 });
 
 async function hideOffcanvas() {
-  const bsOffcanvas = window.bootstrap.Offcanvas.getInstance("#offcanvas")!;
+  const bsOffcanvas = bootstrap.Offcanvas.getInstance("#offcanvas")!;
   bsOffcanvas.hide();
 }
 

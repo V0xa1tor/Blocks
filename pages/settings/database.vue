@@ -2,6 +2,7 @@
 import { Database } from '~/models/Database';
 import { useDatabasesStore } from '~/stores/databases.store';
 import download from 'downloadjs';
+import * as bootstrap from "bootstrap";
 
 const dbs = useDatabasesStore();
 const newDatabaseName = ref('');
@@ -15,7 +16,7 @@ onMounted(async () => {
   const newDatabaseModalEl = document.getElementById('newDatabaseModal')!;
   const newDatabaseNameInput = document.getElementById('newDatabaseName')!;
   
-  newDatabaseModal = new window.bootstrap.Modal(newDatabaseModalEl);
+  newDatabaseModal = new bootstrap.Modal(newDatabaseModalEl);
 
   newDatabaseModalEl.addEventListener('shown.bs.modal', () => {
     newDatabaseNameInput.focus();

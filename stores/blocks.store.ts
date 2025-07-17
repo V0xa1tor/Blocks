@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia';
 import { useDatabasesStore } from './databases.store';
 import { from, useObservable } from '@vueuse/rxjs';
-import { liveQuery } from 'dexie';
+import DexiePkg from 'dexie';
 import type { PageBlock } from '~/models/blocks/PageBlock';
 import { v4 as uuidV4 } from "uuid";
+
+const { default: Dexie, liveQuery } = DexiePkg;
 
 export const useBlocksStore = defineStore('blocks', () => {
 
