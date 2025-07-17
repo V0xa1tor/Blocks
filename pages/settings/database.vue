@@ -2,22 +2,20 @@
 import { Database } from '~/models/Database';
 import { useDatabasesStore } from '~/stores/databases.store';
 import download from 'downloadjs';
-import type { Modal } from 'bootstrap';
 
 const dbs = useDatabasesStore();
 const newDatabaseName = ref('');
-let newDatabaseModal: Modal;
+let newDatabaseModal: bootstrap.Modal;
 
 onMounted(async () => {
   await import('dexie-export-import');
-  const bootstrap = await import("bootstrap");
 
   dbs.loadDatabases();
 
   const newDatabaseModalEl = document.getElementById('newDatabaseModal')!;
   const newDatabaseNameInput = document.getElementById('newDatabaseName')!;
   
-  newDatabaseModal = new bootstrap.Modal(newDatabaseModalEl);
+  newDatabaseModal = new window.bootstrap.Modal(newDatabaseModalEl);
 
   newDatabaseModalEl.addEventListener('shown.bs.modal', () => {
     newDatabaseNameInput.focus();

@@ -13,8 +13,7 @@ onMounted(async () => {
 });
 
 async function hideOffcanvas() {
-  const { Offcanvas } = await import("bootstrap");
-  const bsOffcanvas = Offcanvas.getInstance("#offcanvas")!;
+  const bsOffcanvas = window.bootstrap.Offcanvas.getInstance("#offcanvas")!;
   bsOffcanvas.hide();
 }
 

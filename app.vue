@@ -4,8 +4,6 @@ const loading = ref(true);
 const viewport = useViewportStore();
 
 onMounted(async () => {
-  const bootstrap = await import("bootstrap");
-
   viewport.updateWindowSize();
   window.addEventListener('resize', viewport.updateWindowSize);
 

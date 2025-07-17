@@ -3,8 +3,8 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
 
   css: [
-    "/node_modules/bootstrap/dist/css/bootstrap.css",
-    "/node_modules/bootstrap-icons/font/bootstrap-icons.css"
+    "bootstrap/dist/css/bootstrap.css",
+    "bootstrap-icons/font/bootstrap-icons.css"
   ],
 
   app: {
@@ -13,9 +13,7 @@ export default defineNuxtConfig({
       link: [
         { rel: "icon", href: "/bloctopus.svg" }
       ],
-      script: [
-        { src: "/auto-theme.js" }
-      ]
+      script: [{ src: "/theme.js" }]
     }
   },
 
