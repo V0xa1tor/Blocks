@@ -66,7 +66,7 @@ export default defineNuxtConfig({
     },
     registerType: 'autoUpdate',
     workbox: {
-      navigateFallback: '/',
+      navigateFallback: '/index.html',
       globPatterns: ['**/*']
     }
   },
