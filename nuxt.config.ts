@@ -48,7 +48,7 @@ export default defineNuxtConfig({
       background_color: "#000000",
       icons: [
         {
-          src: '/bloctopus.svg',
+          src: '/bloctopus_small.svg',
           sizes: 'any',
           type: 'image/svg+xml',
         },
