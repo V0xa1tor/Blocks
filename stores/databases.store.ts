@@ -17,6 +17,8 @@ export const useDatabasesStore = defineStore('databases', () => {
     if (databases.value.length > 0) {
       openedDb.value = databases.value[0];
       openedDb.value?.open();
+    } else {
+      openedDb.value = null;
     }
   }
 

@@ -5,6 +5,9 @@ import download from 'downloadjs';
 import * as bootstrap from "bootstrap";
 
 const dbs = useDatabasesStore();
+const otherDbs = computed(() => {
+  return dbs.databases?.filter(db => db.name != dbs.openedDb?.name);
+});
 const newDatabaseName = ref('');
 let newDatabaseModal: bootstrap.Modal;
 
@@ -83,7 +86,7 @@ function deleteDatabase(db: Database) {
 
     <div class="vstack gap-3 mb-3">
       <Loading v-if="!dbs.databases?.length" />
-      <div class="card" v-for="db in dbs.databases">
+      <div class="card" v-for="db in otherDbs">
         <div class="card-body">
 
           <div class="d-flex justify-content-between">
