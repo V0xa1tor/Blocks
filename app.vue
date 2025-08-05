@@ -38,7 +38,7 @@ onMounted(async () => {
 
 <style>
 html, body, #__nuxt {
-  width: 100vw;
-  height: 100vh;
+  width: 100dvw;
+  height: 100dvh;
 }
 </style>
