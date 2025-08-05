@@ -5,7 +5,7 @@
     </div>
     <div class="sticky-bottom">
       <hr class="m-0" style="color: var(--bs-border-color); opacity: 1;">
-      <HorizontalActionMenu />
+      <BottomActionMenu />
     </div>
   </div>
 </template>
