@@ -27,9 +27,9 @@ onMounted(async () => {
   </div>
 
   <div class="vstack h-100">
+    <TopBar />
     <NuxtLayout :name="viewport.isLandscape ? 'landscape' : 'default'" >
       <Offcanvas />
-      <TopBar />
       <NuxtPage />
     </NuxtLayout>
   </div>
