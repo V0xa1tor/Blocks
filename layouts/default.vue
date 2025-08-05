@@ -3,7 +3,7 @@
     <div class="overflow-auto w-100 h-100 vstack">
       <slot></slot>
     </div>
-    <div class="sticky-bottom">
+    <div class="">
       <hr class="m-0" style="color: var(--bs-border-color); opacity: 1;">
       <BottomActionMenu />
     </div>
