@@ -7,11 +7,20 @@ onMounted(async () => {
   viewport.updateWindowSize();
   window.addEventListener('resize', viewport.updateWindowSize);
 
+  window.addEventListener('resize', setAppHeight);
+  window.addEventListener('orientationchange', setAppHeight);
+  setAppHeight();
+
   await useDatabasesStore().loadDatabases();
 
   await sleep(200);
   loading.value = false;
 });
+
+function setAppHeight() {
+  const height = window.innerHeight;
+  document.documentElement.style.setProperty('--app-height', `${height}px`);
+}
 
 </script>
 
@@ -39,6 +48,6 @@ onMounted(async () => {
 <style>
 html, body, #__nuxt {
   width: 100dvw;
-  height: 100dvh;
+  height: var(--app-height);
 }
 </style>
