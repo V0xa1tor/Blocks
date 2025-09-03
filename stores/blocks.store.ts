@@ -30,7 +30,7 @@ export const useBlocksStore = defineStore('blocks', () => {
   );
 
   async function addBlock(title: string, text: string) {
-    await useDatabasesStore().openedDb?.blocks?.add({
+    return await useDatabasesStore().openedDb?.blocks?.add({
       id: uuidV4(),
       type: 'page',
       createdAt: new Date(),

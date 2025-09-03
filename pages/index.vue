@@ -12,6 +12,11 @@ onMounted(async () => {
   });
 });
 
+async function createNewPage() {
+  const id = await blocksStore.addBlock(`Página nova (${blocksStore.blocks.length})`, '');
+  navigateTo(`/block/${id}`);
+}
+
 </script>
 
 <template>
@@ -39,9 +44,9 @@ onMounted(async () => {
     <div>
       <button
         class="btn btn-outline-primary hstack gap-2 p-1 w-100 justify-content-center"
-        @click="blocksStore.addBlock(`Página nova (${blocksStore.blocks.length})`, '')"
+        @click="createNewPage()"
       >
-        <i class="bi bi-plus-lg"></i>Novo bloco
+        <i class="bi bi-plus-lg"></i>Nova página
       </button>
     </div>
 
