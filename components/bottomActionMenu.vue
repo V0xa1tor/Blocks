@@ -4,20 +4,11 @@ import { useActionMenuStore } from "~/stores/actionMenu";
 
 const actionMenu = useActionMenuStore();
 
-onMounted(() => {
-  const sortable = Sortable.create(document.getElementById("action-menu")!, {
-    direction: "horizontal",
-    animation: 150,
-    delay: 500,
-    delayOnTouchOnly: true
-  });
-});
-
 </script>
 
 <template>
   <div class="overflow-auto bg-body-tertiary">
-    <div id="action-menu"
+    <div
       class="hstack flex-grow-0 p-2 gap-3 mx-auto"
       style="width: fit-content;"
     >
@@ -37,9 +28,5 @@ onMounted(() => {
 <style scoped>
 i, i::before {
   display: block;
-}
-
-.sortable-ghost {
-  opacity: 0;
 }
 </style>

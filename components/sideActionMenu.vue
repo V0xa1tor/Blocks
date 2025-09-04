@@ -4,15 +4,6 @@ import { useActionMenuStore } from "~/stores/actionMenu";
 
 const actionMenu = useActionMenuStore();
 
-onMounted(() => {
-  const sortable = Sortable.create(document.getElementById("action-menu")!, {
-    direction: "vertical",
-    animation: 150,
-    delay: 500,
-    delayOnTouchOnly: true
-  });
-});
-
 </script>
 
 <template>
@@ -34,9 +25,5 @@ onMounted(() => {
 <style scoped>
 i, i::before {
   display: block;
-}
-
-.sortable-ghost {
-  opacity: 0;
 }
 </style>
