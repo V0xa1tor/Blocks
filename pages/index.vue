@@ -14,7 +14,7 @@ onMounted(async () => {
 
 async function createNewPage() {
   const id = await blocksStore.addBlock(`Página nova (${blocksStore.blocks.length})`, '');
-  navigateTo(`/block/${id}`);
+  navigateTo(`${id}`);
 }
 
 </script>
@@ -26,7 +26,7 @@ async function createNewPage() {
       <div class="hstack rounded-2" v-for="block in blocksStore.blocks">
         <button
           class="btn border-0 p-1 flex-grow-1 text-start"
-          @click="navigateTo(`/block/${block.id}`)"
+          @click="navigateTo(`${block.id}`)"
         >
           {{ block.content.title }}
         </button>
