@@ -17,7 +17,7 @@ const actionMenu = useActionMenuStore();
       >
         <i :class="`bi ${item.icon}`"></i>
       </button>
-      <hr v-if="item.type == 'divider'" class="my-2 w-100" style="color: var(--bs-border-color); opacity: 1;">
+      <hr v-if="item.type == 'divider'" class="my-0 w-100" style="color: var(--bs-border-color); opacity: 1;">
     </div>
   </div>
 </template>
