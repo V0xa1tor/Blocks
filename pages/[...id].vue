@@ -6,7 +6,6 @@ const block = ref(blocksStore.blocks.find((b) => b.id == blockId));
 
 watch(block, async (newBlock) => {
   if (newBlock !== undefined) await blocksStore.updateBlock(toRaw(newBlock));
-  console.log("mudou");
 }, { deep: true });
 
 onMounted(() => {
