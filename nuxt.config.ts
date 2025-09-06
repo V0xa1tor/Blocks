@@ -14,6 +14,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: "Bloctopus",
+      viewport: "width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, target-densitydpi=device-dpi",
       link: [
         { rel: "icon", href: "/bloctopus.svg" },
         {
