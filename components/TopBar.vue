@@ -30,8 +30,8 @@ const breadcrumbItems = computed(() => {
     <div>
       <button class="btn p-1 fs-4" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"><i class="bi bi-list"></i></button>
     </div>
-    <ol class="breadcrumb m-0">
-      <li v-for="item in breadcrumbItems" class="breadcrumb-item">
+    <ol class="breadcrumb flex-nowrap m-0 overflow-auto">
+      <li v-for="item in breadcrumbItems" class="breadcrumb-item text-nowrap">
         <NuxtLink :to="item.path">{{ item.name }}</NuxtLink>
       </li>
     </ol>

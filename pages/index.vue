@@ -25,7 +25,7 @@ async function createNewPage() {
     <div id="home-blocks" class="vstack flex-grow-0 gap-1">
       <div class="hstack rounded-2" v-for="block in blocksStore.blocks">
         <button
-          class="btn border-0 p-1 flex-grow-1 text-start"
+          class="btn border-0 p-1 flex-grow-1 text-start overflow-hidden text-truncate"
           @click="navigateTo(`${block.id}`)"
         >
           {{ block.content.title }}

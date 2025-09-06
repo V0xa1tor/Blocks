@@ -29,7 +29,7 @@ onMounted(() => {
       </ol>
     </nav> -->
 
-    <input placeholder="Título..." type="text" class="form-control shadow-none p-3 pb-0 border-0 rounded-0 fs-1" @input="(e) => block!.content.title = (e.target as HTMLInputElement).value" id="page-title" />
+    <textarea placeholder="Título..." class="form-control shadow-none p-3 pb-0 border-0 rounded-0 fs-1" style="resize: none; field-sizing: content;" @input="(e) => block!.content.title = (e.target as HTMLInputElement).value" id="page-title"></textarea>
     <textarea placeholder="Escreva aqui..." class="form-control shadow-none flex-grow-1 p-3 border-0 rounded-0 pb-5" style="resize: none; field-sizing: content;" @input="(e) => block!.content.text = (e.target as HTMLInputElement).value" id="page-text"></textarea>
 
   </div>

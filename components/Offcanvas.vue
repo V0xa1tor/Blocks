@@ -31,7 +31,7 @@ async function hideOffcanvas() {
       <div id="offcanvas-blocks" class="vstack gap-1">
         <div class="hstack rounded-2" v-for="block in blocksStore.blocks">
           <button
-            class="btn border-0 p-1 flex-grow-1 text-start"
+            class="btn border-0 p-1 flex-grow-1 text-start overflow-hidden text-truncate"
             @click="() => { hideOffcanvas(); navigateTo(`${block.id}`); }"
           >
             {{ block.content.title }}
