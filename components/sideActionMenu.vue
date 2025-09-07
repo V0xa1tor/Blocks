@@ -4,12 +4,22 @@ import { useActionMenuStore } from "~/stores/actionMenu";
 
 const actionMenu = useActionMenuStore();
 
+function toggleOffcanvas() {
+  const offcanvas = document.getElementById("offcanvas")!;
+  if (offcanvas.style.marginLeft == "0px") {
+    offcanvas.style.marginLeft = "calc(var(--bs-offcanvas-width) * -1)";
+  } else {
+    offcanvas.style.marginLeft = "0px";
+  }
+}
+
 </script>
 
 <template>
   <div id="action-menu"
     class="vstack flex-grow-0 p-2 gap-3 overflow-auto bg-body-tertiary"
   >
+    <button class="btn p-1 fs-4" @click="toggleOffcanvas"><i class="bi bi-list"></i></button>
     <div v-for="item in actionMenu.items" class="w-100">
       <button v-if="item.type == 'action'"
         class="btn fs-4 p-1"
@@ -25,5 +35,9 @@ const actionMenu = useActionMenuStore();
 <style scoped>
 i, i::before {
   display: block;
+}
+
+#action-menu {
+  z-index: calc(1045 + 1);
 }
 </style>

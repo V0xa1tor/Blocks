@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { window } from 'rxjs';
 
-const blocksStore = useBlocksStore();
+
 const breadcrumbItems = computed(() => {
   const breadcrumb: breadcrumbItem[] = [];
   const fullPath = useRouter().currentRoute.value.fullPath;
@@ -26,15 +27,19 @@ const breadcrumbItems = computed(() => {
 </script>
 
 <template>
-  <nav class="hstack align-items-stretch gap-2 bg-body-tertiary border-bottom">
-    <div class="p-2">
-      <button class="btn p-1 fs-4" data-bs-toggle="offcanvas" data-bs-target="#offcanvas"><i class="bi bi-list"></i></button>
+  <nav class="hstack flex-nowrap align-items-stretch">
+    <div class="p-2 text-nowrap">
+      <button class="btn p-1 fs-4" @click="$router.back()"><i class="bi bi-arrow-left"></i></button>
+      <button class="btn p-1 fs-4" @click="$router.forward()"><i class="bi bi-arrow-right"></i></button>
     </div>
-    <ol class="breadcrumb align-items-center flex-nowrap m-0 overflow-auto">
+    <ol class="breadcrumb align-items-center flex-nowrap flex-grow-1 justify-content-center m-0 overflow-auto">
       <li v-for="item in breadcrumbItems" class="breadcrumb-item text-nowrap">
         <NuxtLink :to="item.path">{{ item.name }}</NuxtLink>
       </li>
     </ol>
+    <div class="p-2 hstack align-items-center">
+      <button class="btn p-1 fs-4"><i class="bi bi-three-dots-vertical"></i></button>
+    </div>
   </nav>
 </template>
 

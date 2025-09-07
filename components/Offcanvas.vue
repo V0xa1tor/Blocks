@@ -23,10 +23,10 @@ async function hideOffcanvas() {
 </script>
 
 <template>
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas">
+  <div data-bs-backdrop="false" class="offcanvas offcanvas-start show" tabindex="-1" id="offcanvas">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasLabel">Blocos</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      <!-- <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button> -->
     </div>
     <div class="offcanvas-body vstack gap-3">
 
@@ -66,6 +66,18 @@ async function hideOffcanvas() {
 <style scoped>
 i, i::before {
   display: block;
+}
+
+.offcanvas {
+  --bs-offcanvas-width: 300px;
+  --bs-offcanvas-transition: margin 0.3s ease-in-out;
+}
+
+#offcanvas {
+  position: relative;
+  left: inherit;
+  height: 100%;
+  margin-left: calc(var(--bs-offcanvas-width) * -1);
 }
 
 .sortable-ghost {

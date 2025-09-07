@@ -36,10 +36,13 @@ function setAppHeight() {
   </div>
 
   <div class="vstack h-100">
-    <TopBar />
     <NuxtLayout :name="viewport.isLandscape ? 'landscape' : 'default'" >
       <Offcanvas />
-      <NuxtPage />
+      <div class="vstack" style="width: 1%;">
+        <TopBar2 />
+        <TopBar />
+        <NuxtPage class="overflow-auto" />
+      </div>
     </NuxtLayout>
   </div>
   
