@@ -7,8 +7,10 @@ onMounted(async () => {
   const sortable = Sortable.create(document.getElementById("home-blocks")!, {
     direction: "vertical",
     animation: 150,
-    delay: 500,
-    delayOnTouchOnly: true
+    easing: "ease-out",
+    delay: 450,
+    delayOnTouchOnly: true,
+    forceFallback: true
   });
 });
 
@@ -23,7 +25,7 @@ async function createNewPage() {
   <div class="p-3 vstack gap-3">
 
     <div id="home-blocks" class="vstack flex-grow-0 gap-1">
-      <div class="hstack rounded-2" v-for="block in blocksStore.blocks">
+      <div class="hstack rounded-2 d-flex" v-for="block in blocksStore.blocks">
         <button
           class="btn border-0 p-1 flex-grow-1 text-start overflow-hidden text-truncate"
           @click="navigateTo(`${block.id}`)"
@@ -59,10 +61,18 @@ i, i::before {
 }
 
 .sortable-ghost {
-  opacity: 0;
+  background-color: var(--bs-tertiary-bg);
 }
 
-#home-blocks > div:hover {
+.sortable-drag {
+  opacity: 0 !important;
+}
+
+#home-blocks:not(:has(.sortable-ghost)) > div:hover {
   background-color: var(--bs-tertiary-bg);
+}
+
+#home-blocks:has(.sortable-ghost), #home-blocks:has(.sortable-ghost) * {
+  cursor: grabbing;
 }
 </style>

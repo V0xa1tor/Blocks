@@ -8,8 +8,10 @@ onMounted(async () => {
   const sortable = Sortable.create(document.getElementById("offcanvas-blocks")!, {
     direction: "vertical",
     animation: 150,
-    delay: 500,
-    delayOnTouchOnly: true
+    easing: "ease-out",
+    delay: 450,
+    delayOnTouchOnly: true,
+    forceFallback: true
   });
 });
 
@@ -67,10 +69,18 @@ i, i::before {
 }
 
 .sortable-ghost {
-  opacity: 0;
+  background-color: var(--bs-tertiary-bg);
 }
 
-#offcanvas-blocks > div:hover {
+.sortable-drag {
+  opacity: 0 !important;
+}
+
+#offcanvas-blocks:not(:has(.sortable-ghost)) > div:hover {
   background-color: var(--bs-tertiary-bg);
+}
+
+#offcanvas-blocks:has(.sortable-ghost), #offcanvas-blocks:has(.sortable-ghost) * {
+  cursor: grabbing;
 }
 </style>
