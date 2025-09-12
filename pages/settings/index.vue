@@ -3,7 +3,8 @@ const pages = [
   { icon: "bi-database", title: "Bancos de dados", link: "/settings/database" },
   { icon: "bi-archive", title: "Espaço utilizado", link: "/settings/storage" },
   { icon: "bi-palette", title: "Customização", link: "/settings/customization" },
-  { icon: "bi-lightning-charge", title: "Menu de ações", link: "/settings/actions" }
+  { icon: "bi-lightning-charge", title: "Menu de ações", link: "/settings/actions" },
+  { icon: "bi-about", title: "Sobre", link: "/settings/about" }
 ];
 </script>
 
