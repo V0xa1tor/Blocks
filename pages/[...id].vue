@@ -4,6 +4,10 @@ const blockId = ids[ids.length - 1];
 const blocksStore = useBlocksStore();
 const block = ref(blocksStore.blocks.find((b) => b.id == blockId));
 
+useHead({
+  title: () => block.value?.content.title || 'Sem título'
+});
+
 watch(block, async (newBlock) => {
   if (newBlock !== undefined) await blocksStore.updateBlock(toRaw(newBlock));
 }, { deep: true });

@@ -34,9 +34,10 @@ async function hideOffcanvas() {
         <div class="hstack rounded-2" v-for="block in blocksStore.blocks">
           <button
             class="btn border-0 p-1 flex-grow-1 text-start overflow-hidden text-truncate"
+            :class="{'text-secondary': !block.content.title }"
             @click="() => { hideOffcanvas(); navigateTo(`${block.id}`); }"
           >
-            {{ block.content.title }}
+            {{ block.content.title || 'Sem título' }}
           </button>
           <div class="dropdown">
             <button class="btn border-0 p-2" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></button>
@@ -54,7 +55,7 @@ async function hideOffcanvas() {
     <div class="p-3">
       <button
         class="btn btn-outline-primary hstack gap-2 p-1 w-100 justify-content-center"
-        @click="blocksStore.addBlock(`Página nova (${blocksStore.blocks.length})`, '')"
+        @click="blocksStore.addBlock('', '')"
       >
         <i class="bi bi-plus-lg"></i>Novo bloco
       </button>

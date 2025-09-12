@@ -34,7 +34,7 @@ const breadcrumbItems = computed(() => {
     </div>
     <ol class="breadcrumb align-items-center flex-nowrap flex-grow-1 justify-content-center m-0 overflow-auto">
       <li v-for="item in breadcrumbItems" class="breadcrumb-item text-nowrap">
-        <NuxtLink :to="item.path">{{ item.name }}</NuxtLink>
+        <NuxtLink class="text-decoration-none" :class="{ 'text-body': !item.path && item.name, 'text-secondary': !item.name }" :to="item.path">{{ item.name || 'Sem título' }}</NuxtLink>
       </li>
     </ol>
     <div class="p-2 hstack align-items-center">
