@@ -13,7 +13,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: "Bloctopus",
+      title: "Blocks",
       viewport: "width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0, target-densitydpi=device-dpi",
       link: [
         { rel: "icon", href: "/bloctopus.svg" },
@@ -41,8 +41,8 @@ export default defineNuxtConfig({
       '/fonts/*'
     ],
     manifest: {
-      name: 'Bloctopus',
-      short_name: 'Bloctopus',
+      name: 'Blocks',
+      short_name: 'Blocks',
       start_url: '/',
       description: 'Block and octopus',
       theme_color: '#000000',
