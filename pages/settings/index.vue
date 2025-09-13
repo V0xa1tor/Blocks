@@ -4,7 +4,7 @@ const pages = [
   { icon: "bi-archive", title: "Espaço utilizado", link: "/settings/storage" },
   { icon: "bi-palette", title: "Customização", link: "/settings/customization" },
   { icon: "bi-lightning-charge", title: "Menu de ações", link: "/settings/actions" },
-  { icon: "bi-about", title: "Sobre", link: "/settings/about" }
+  { icon: "bi-info-circle", title: "Sobre", link: "/settings/about" }
 ];
 </script>
 
