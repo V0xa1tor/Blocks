@@ -5,7 +5,8 @@ import { Database } from '~/models/Database';
 <template>
   <div class="vstack container align-items-center justify-content-between my-5">
     <div class="d-flex flex-column align-items-center user-select-none">
-      <img src="/bloctopus.svg" style="width: 7rem;" draggable="false" alt="Bloctopus icon">
+      <img @click="(e) => { if (e.detail === 3) navigateTo('/game') }"
+       src="/bloctopus.svg" style="width: 7rem;" draggable="false" alt="Bloctopus icon">
       <h1 class="fw-semibold">Blocks</h1>
     </div>
     
