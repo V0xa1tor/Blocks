@@ -11,29 +11,29 @@
   },
   "dependencies": {
     "@formkit/tempo": "^0.1.2",
-    "@pinia/nuxt": "^0.11.1",
+    "@pinia/nuxt": "^0.11.2",
     "@popperjs/core": "^2.11.8",
     "@types/downloadjs": "^1.4.6",
     "@types/sortablejs": "^1.15.8",
     "@vite-pwa/nuxt": "^1.0.4",
-    "@vueuse/rxjs": "^13.5.0",
-    "bootstrap": "^5.3.7",
+    "@vueuse/rxjs": "^13.9.0",
+    "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
     "chart.js": "^4.5.0",
-    "dexie": "^4.0.11",
+    "dexie": "^4.2.0",
     "dexie-export-import": "^4.1.4",
     "downloadjs": "^1.4.7",
-    "nuxt": "^3.17.5",
+    "nuxt": "^4.1.2",
     "pinia": "^3.0.3",
     "rxjs": "^7.8.2",
     "sortablejs": "^1.15.6",
-    "uuid": "^11.1.0",
-    "vue": "^3.5.17",
+    "uuid": "^13.0.0",
+    "vue": "^3.5.21",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.10",
-    "typescript": "^5.8.3",
-    "vue-tsc": "^2.2.10"
+    "typescript": "^5.9.2",
+    "vue-tsc": "^3.0.7"
   }
 }
