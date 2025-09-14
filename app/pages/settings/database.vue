@@ -129,7 +129,7 @@ function deleteDatabase(db: Database) {
             </div>
           </div>
           <div class="modal-footer justify-content-between">
-            <small class="text-secondary text-end">Versão {{ Database.v }}</small>
+            <small class="text-secondary text-end">Versão {{ useAppConfig().version }}</small>
             <div class="flex-grow-1 text-end">
               <button type="button" class="btn" data-bs-dismiss="modal">Cancelar</button>
               <button type="button" class="btn btn-primary" @click="createNewDatabase(newDatabaseName)">Criar banco</button>

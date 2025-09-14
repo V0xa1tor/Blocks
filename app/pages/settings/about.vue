@@ -15,7 +15,7 @@ import { Database } from '~/models/Database';
     </div>
     
     <div class="text-secondary">
-      <p>Version {{ Database.v }}</p>
+      <p>Version {{ useAppConfig().version }}</p>
     </div>
   </div>
 </template>

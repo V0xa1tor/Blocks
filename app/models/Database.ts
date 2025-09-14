@@ -6,15 +6,13 @@ import type { Task } from './Task';
 
 export class Database extends Dexie {
 
-  static readonly v: number = 2;
-
   blocks!: Table<PageBlock, string>;
   settings!: Table<Setting, string>;
   tasks!: Table<Task, number>;
 
   constructor(name: string, options?: DexieOptions) {
     super(name, options);
-    this.version(Database.v).stores({
+    this.version(useAppConfig().version).stores({
       blocks: "id, parentId, type, createdAt, updatedAt",
       settings: "id, group",
       tasks: "++id, title, done"
