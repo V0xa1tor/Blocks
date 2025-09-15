@@ -17,7 +17,7 @@ function toggleOffcanvas() {
 
 <template>
   <div id="action-menu"
-    class="vstack flex-grow-0 p-2 gap-3 overflow-auto bg-body-tertiary"
+    class="d-flex flex-md-column border-end flex-grow-0 p-2 gap-3 overflow-auto bg-body-tertiary"
   >
     <button class="btn p-1 fs-4" @click="toggleOffcanvas"><i class="bi bi-list"></i></button>
     <div v-for="item in actionMenu.items" class="w-100">

@@ -35,15 +35,17 @@ function setAppHeight() {
     <Loading />
   </div>
 
-  <div class="vstack h-100">
-    <NuxtLayout :name="viewport.isLandscape ? 'landscape' : 'default'" >
-      <Offcanvas />
+  <div class="d-flex flex-column-reverse flex-md-row h-100 overflow-auto">
+    <ActionMenu /> <!-- Side / Bottom -->
+    <!-- <div class="vr" style="color: var(--bs-border-color); opacity: 1;"></div> -->
+    <div class="hstack w-100 h-100 overflow-auto">
+      <SidePanel />
       <div class="vstack" style="width: 1%;">
         <TopBar2 />
         <TopBar />
         <NuxtPage class="overflow-auto" />
       </div>
-    </NuxtLayout>
+    </div>
   </div>
   
 </template>
