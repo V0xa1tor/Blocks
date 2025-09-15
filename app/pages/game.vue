@@ -11,7 +11,7 @@ const pairsNumber = 8;
 const bi = Object.values(bootstrapIcons);
 let icons: number[] = [];
 for (let i = 0; i < pairsNumber; i++) {
-  const randomIcon = bi[Math.floor(Math.random() * bi.length)];
+  const randomIcon = bi[Math.floor(Math.random() * bi.length)]!;
   icons.push(randomIcon);
   icons.push(randomIcon);
 }
