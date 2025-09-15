@@ -17,9 +17,15 @@ blocksIcon.addEventListener("mouseleave", cancelPress);
 // Mobile (toque)
 blocksIcon.addEventListener("touchstart", startPress);
 blocksIcon.addEventListener("touchend", cancelPress);
+blocksIcon.addEventListener("touchcancel", cancelPress);
 });
 
 function startPress() {
+  navigator.vibrate([
+    100,100, 100,100, 100,100,
+    100,50, 100,50, 100,50, 100,50, 100,50, 100,50, 100,50,
+    100,10, 100,10, 100,10, 100,10, 100,10, 100,10, 100,10, 100,10, 100,10, 100,10, 100,10, 100,10
+  ]);
   duration = 1; // reset
   blocksIcon.classList.add("shake");
   blocksIcon.style.animationDuration = `${duration}s`;
@@ -39,6 +45,7 @@ function startPress() {
 }
 
 function cancelPress() {
+  navigator.vibrate([]);
   blocksIcon.classList.remove("shake");
   blocksIcon.style.animationDuration = `1s`; // volta ao normal
   clearTimeout(pressTimer);
