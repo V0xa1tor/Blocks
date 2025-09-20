@@ -5,11 +5,10 @@ import download from 'downloadjs';
 import * as bootstrap from "bootstrap";
 
 const dbs = useDatabasesStore();
-const otherDbs = computed(() => {
-  return dbs.databases?.filter(db => db.name != dbs.openedDb?.name);
-});
 const newDatabaseName = ref('');
+const isNewDatabaseNameValid = computed(() => newDatabaseName.value.trim().length > 0 && !dbs.databases?.some(db => db.name.trim() === newDatabaseName.value.trim()));
 let newDatabaseModal: bootstrap.Modal;
+const formWasValidated = ref(false);
 
 onMounted(async () => {
   await import('dexie-export-import');
@@ -24,13 +23,23 @@ onMounted(async () => {
   newDatabaseModalEl.addEventListener('shown.bs.modal', () => {
     newDatabaseNameInput.focus();
   });
+
+  newDatabaseModalEl.addEventListener('hidden.bs.modal', () => {
+    formWasValidated.value = false;
+  });
 });
 
 async function createNewDatabase(name: string) {
+  formWasValidated.value = true;
+
+  if (!isNewDatabaseNameValid.value) return;
+
   await dbs.createDatabase(name);
   newDatabaseModal.hide();
   newDatabaseName.value = "";
   dbs.loadDatabases();
+
+  formWasValidated.value = false;
 }
 
 async function exportDatabase(db: Database) {
@@ -51,47 +60,33 @@ function deleteDatabase(db: Database) {
 </script>
 
 <template>
-  <div class="container vstack gap-3 my-3">
+  <div class="container vstack gap-3">
 
-    <h1 class="mb-3">Bancos de dados</h1>
-
-    <div v-if="dbs.openedDb" class="card border-primary">
-      <div class="card-body">
-
-        <div class="d-flex justify-content-between">
-          <h2>{{ dbs.openedDb.name }}</h2>
-          <div class="dropdown">
-            <button class="btn p-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-three-dots"></i>
-            </button>
-            <ul class="dropdown-menu">
-              <li><button class="dropdown-item" disabled>Renomear</button></li>
-              <li><button class="dropdown-item" @click="exportDatabase(dbs.openedDb)">Exportar</button></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><button class="dropdown-item text-danger" @click="deleteDatabase(dbs.openedDb)">Excluir</button></li>
-            </ul>
-          </div>
-        </div>
-        
-        <small class="text-secondary">Version {{ dbs.openedDb.verno }}</small>
-        
-      </div>
-    </div>
-
-    <div class="hstack gap-3 justify-content-end flex-wrap">
-      <button class="btn btn-outline-primary hstack gap-2" data-bs-toggle="modal" data-bs-target="#newDatabaseModal"><i class="bi bi-plus-lg"></i>Novo banco</button>
-      <label class="btn btn-outline-primary hstack gap-2" for="import"><i class="bi bi-download"></i>Importar banco</label>
-      <input class="d-none" @change="(e) => importDatabase((e.target as HTMLInputElement).files)" type="file" multiple id="import">
-    </div>
+    <h1 class="mb-3">Banco de dados</h1>
 
     <div class="vstack gap-3 mb-3">
-      <Loading v-if="!dbs.databases?.length" />
-      <div class="card" v-for="db in otherDbs">
-        <div class="card-body">
 
-          <div class="d-flex justify-content-between">
-            <h2>{{ db.name }}</h2>
-            <div class="dropdown">
+      <!-- No database -->
+      <div v-if="!dbs.databases?.length" class="card text-body-tertiary" style="border-style: dashed;">
+        <div class="card-body text-center">
+          <h2 class="m-0">Sem banco de dados</h2>
+          <small>Crie ou importe um banco de dados</small>
+        </div>
+      </div>
+
+      <!-- Databases list -->
+      <div v-for="db in dbs.databases" :key="db.name">
+        <label class="card" :for="db.name">
+          <div class="card-body hstack">
+  
+            <input type="radio" class="form-check-input m-0 me-3" name="database" :id="db.name" autocomplete="off" checked>
+
+            <div class="me-auto">
+              <h2 class="m-0">{{ db.name }}</h2>
+              <small class="text-secondary">Version {{ db.verno }}</small>
+            </div>
+            
+            <div class="dropdown align-self-start">
               <button class="btn p-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-three-dots"></i>
               </button>
@@ -102,13 +97,19 @@ function deleteDatabase(db: Database) {
                 <li><button class="dropdown-item text-danger" @click="deleteDatabase(db)">Excluir</button></li>
               </ul>
             </div>
+            
           </div>
-          
-          <small class="text-secondary">Version {{ db.verno }}</small>
-          
-        </div>
+        </label>
       </div>
+
+      <div class="hstack gap-3 justify-content-end flex-wrap">
+        <button class="btn btn-outline-primary hstack gap-2" data-bs-toggle="modal" data-bs-target="#newDatabaseModal"><i class="bi bi-plus-lg"></i>Novo banco</button>
+        <label class="btn btn-outline-primary hstack gap-2" for="import"><i class="bi bi-download"></i>Importar banco</label>
+        <input class="d-none" @change="(e) => importDatabase((e.target as HTMLInputElement).files)" type="file" multiple id="import">
+      </div>
+      
     </div>
+
 
     <!-- Modal -->
     <div class="modal fade" id="newDatabaseModal" tabindex="-1">
@@ -120,10 +121,13 @@ function deleteDatabase(db: Database) {
           </div>
           <div class="modal-body">
             <div class="vstack gap-3">
-              <form @submit.prevent="createNewDatabase(newDatabaseName)">
+              <form id="newDatabaseModalForm" @submit.prevent="createNewDatabase(newDatabaseName)">
                 <div class="form-floating">
-                  <input v-model="newDatabaseName" type="text" class="form-control" id="newDatabaseName" placeholder="Novo banco de dados">
+                  <input :class="{'is-valid': formWasValidated && isNewDatabaseNameValid, 'is-invalid': formWasValidated && !isNewDatabaseNameValid}" v-model="newDatabaseName" type="text" class="form-control" id="newDatabaseName" placeholder="Novo banco de dados">
                   <label for="newDatabaseName">Nome do banco</label>
+                  <div class="invalid-feedback">
+                    {{ dbs.databases?.some(db => db.name.trim() === newDatabaseName.trim()) ? 'Já existe um banco com esse nome' : 'O nome não pode ser vazio' }}
+                  </div>
                 </div>
               </form>
             </div>
@@ -132,7 +136,7 @@ function deleteDatabase(db: Database) {
             <small class="text-secondary text-end">Versão {{ useAppConfig().version }}</small>
             <div class="flex-grow-1 text-end">
               <button type="button" class="btn" data-bs-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-primary" @click="createNewDatabase(newDatabaseName)">Criar banco</button>
+              <input type="submit" form="newDatabaseModalForm" class="btn btn-primary" value="Criar banco" />
             </div>
           </div>
         </div>
@@ -145,5 +149,18 @@ function deleteDatabase(db: Database) {
 <style scoped>
 i, i::before {
   display: block;
+}
+
+label.card, label.card input {
+  cursor: pointer;
+  .dropdown {
+    cursor: auto;
+  }
+}
+
+label.card:has(input:checked) {
+  border-color: var(--bs-primary);
+  background-color: rgba(var(--bs-primary-rgb), .05);
+  box-shadow: 0 0 0 2px rgba(var(--bs-primary-rgb), 1);
 }
 </style>
