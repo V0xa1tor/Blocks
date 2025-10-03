@@ -48,7 +48,6 @@ function setupSortable(id: string) {
           fallbackOnBody: true,
           delay: 450,
           easing: "ease-out",
-          invertSwap: true,
           delayOnTouchOnly: true,
           forceFallback: true,
           onStart(evt) {
