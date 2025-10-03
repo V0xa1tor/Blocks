@@ -11,7 +11,7 @@ onMounted(async () => {
   window.addEventListener('orientationchange', setAppHeight);
   setAppHeight();
 
-  await useDatabasesStore().loadDatabases();
+  useRepositoryStore().loadRepositories();
 
   await sleep(200);
   loading.value = false;

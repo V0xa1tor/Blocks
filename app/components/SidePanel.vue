@@ -2,86 +2,17 @@
 import * as bootstrap from "bootstrap";
 
 const blocksStore = useBlocksStore();
+const repositoryStore = useRepositoryStore();
 
-// Dados fictícios de tree de pastas e arquivos
-interface FileNode {
-  id: string;
-  name: string;
-  type: 'folder' | 'file';
-  children?: FileNode[];
-  collapsed?: boolean;
-}
+const treeData = ref<FSItem[]>([]);
 
-const treeData = ref<FileNode[]>([
-  {
-    id: "folder1",
-    name: "Documentos",
-    type: "folder",
-    collapsed: false,
-    children: [
-      { id: "file1", name: "Resumo.txt", type: "file" },
-      { id: "file2", name: "Notas.md", type: "file" },
-      {
-        id: "folder2",
-        name: "Projetos",
-        type: "folder",
-        collapsed: true,
-        children: [
-          { id: "file3", name: "Projeto1.docx", type: "file" },
-          {
-            id: "folder4",
-            name: "Subprojetos",
-            type: "folder",
-            collapsed: true,
-            children: [
-              { id: "file4", name: "SubprojetoA.txt", type: "file" },
-              {
-                id: "folder6",
-                name: "Arquivos Finais",
-                type: "folder",
-                collapsed: true,
-                children: [
-                  { id: "file5", name: "Final1.pdf", type: "file" },
-                  { id: "file6", name: "Final2.pdf", type: "file" }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: "folder3",
-    name: "Imagens",
-    type: "folder",
-    collapsed: true,
-    children: [
-      { id: "file7", name: "foto1.png", type: "file" },
-      { id: "file8", name: "foto2.jpg", type: "file" },
-      {
-        id: "folder5",
-        name: "Mais Imagens",
-        type: "folder",
-        collapsed: true,
-        children: [
-          { id: "file9", name: "extra1.png", type: "file" },
-          {
-            id: "folder7",
-            name: "Arquivos RAW",
-            type: "folder",
-            collapsed: true,
-            children: [
-              { id: "file10", name: "raw1.cr2", type: "file" },
-              { id: "file11", name: "raw2.cr2", type: "file" }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  { id: "file12", name: "README.md", type: "file" }
-]);
+onMounted(async () => {
+  await repositoryStore.loadRepositories();
+  await repositoryStore.listAllFilesAndDirs().then(files => {
+    console.log(files);
+    treeData.value = files;
+  });
+});
 
 function hideOffcanvas() {
   const bsOffcanvas = bootstrap.Offcanvas.getInstance("#offcanvas");
