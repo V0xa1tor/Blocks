@@ -41,7 +41,7 @@ function setAppHeight() {
     <div class="hstack w-100 h-100 overflow-auto">
       <SidePanel />
       <div class="vstack" style="width: 1%;">
-        <TopBar2 />
+        <!-- <TopBar2 /> -->
         <TopBar />
         <NuxtPage class="overflow-auto" />
       </div>

@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { window } from 'rxjs';
 
+declare global {
+  interface Window {
+    tuiEditor: any;
+  }
+}
 
 const breadcrumbItems = computed(() => {
   const breadcrumb: breadcrumbItem[] = [];
@@ -16,13 +20,19 @@ const breadcrumbItems = computed(() => {
       const block = useBlocksStore().blocks.find(block => block.id == splitedPath[i]);
 
       breadcrumb.push({
-        name: block ? block.content.title : splitedPath[i],
+        name: block ? block.content.title : splitedPath[i]!,
         path: i == splitedPath.length -1 ? '' : '/' + splitedPath.slice(0, i + 1).join('/')
       });
     }
     return breadcrumb;
   }
 });
+
+function toggleView() {
+  const currentTab = window.tuiEditor.getCurrentPreviewTab();
+  const nextTab = currentTab === 'write' ? 'preview' : 'write';
+  window.tuiEditor.changePreviewTab(nextTab);
+}
 
 </script>
 
@@ -40,7 +50,7 @@ const breadcrumbItems = computed(() => {
       </ol>
     </div>
     <div class="p-2 hstack align-items-center">
-      <button class="btn p-1 fs-4"><i class="bi bi-three-dots-vertical"></i></button>
+      <button @click="toggleView" class="btn p-1 fs-4"><i class="bi bi-three-dots-vertical"></i></button>
     </div>
   </nav>
 </template>

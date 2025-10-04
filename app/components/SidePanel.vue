@@ -9,7 +9,6 @@ const treeData = ref<FSItem[]>([]);
 onMounted(async () => {
   await repositoryStore.loadRepositories();
   await repositoryStore.listAllFilesAndDirs().then(files => {
-    console.log(files);
     treeData.value = files;
   });
 });
@@ -17,6 +16,10 @@ onMounted(async () => {
 function hideOffcanvas() {
   const bsOffcanvas = bootstrap.Offcanvas.getInstance("#offcanvas");
   if (bsOffcanvas) bsOffcanvas.hide();
+}
+
+async function createNewBlock() {
+  await repositoryStore.repository?.pfs.writeFile("/new-block.md", "# Novo bloco\n\nEscreva aqui...", "utf8");
 }
 
 </script>
@@ -35,7 +38,7 @@ function hideOffcanvas() {
     <div class="p-3">
       <button
         class="btn btn-outline-primary hstack gap-2 p-1 w-100 justify-content-center"
-        @click="hideOffcanvas"
+        @click="createNewBlock"
       >
         <i class="bi bi-plus-lg"></i>Novo bloco
       </button>

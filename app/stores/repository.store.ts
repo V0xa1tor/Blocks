@@ -171,6 +171,14 @@ export const useRepositoryStore = defineStore("repository", () => {
     return items;
   }
 
+  async function getFile(path: string): Promise<FSFile | null> {
+    if (!repository.value) return null;
+    return {
+      name: path.replace(/\/$/, "").split("/").pop()!,
+      path,
+      content: await repository.value?.pfs.readFile(path, "utf8")
+    };
+  }
 
   return {
     repositories,
@@ -182,6 +190,7 @@ export const useRepositoryStore = defineStore("repository", () => {
     renameRepository,
     exportRepositoryZip,
     importRepositoryZip,
-    listAllFilesAndDirs
+    listAllFilesAndDirs,
+    getFile
   };
 });

@@ -88,7 +88,9 @@ onUpdated(() => {
       <li class="rounded gap-1 d-flex flex-column">
         <div
           class="file hstack gap-2 align-items-center rounded-2 py-1 px-2"
-          @click="node.type === 'dir' && !ignoreClick ? toggleFolder(node) : null"
+          @click="!ignoreClick
+          ? (node.type === 'dir' ? toggleFolder(node) : navigateTo(node.path))
+          : null"
         >
           <template v-if="node.type === 'dir'">
             <i class="text-body-tertiary" :class="node.collapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'" style="font-size:1.2em"></i>

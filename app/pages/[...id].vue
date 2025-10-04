@@ -1,31 +1,45 @@
 <script setup lang="ts">
-const ids = useRoute().params.id;
-const blockId = ids[ids.length - 1];
-const blocksStore = useBlocksStore();
-const block = ref(blocksStore.blocks.find((b) => b.id == blockId));
+import TuiEditor from '~/components/TuiEditor.vue';
+
+const path = useRouter().currentRoute.value.path;
+const repositoryStore = useRepositoryStore();
+const file = ref<FSFile | null>(null);
+
+watch(
+  () => repositoryStore.repository,
+  async (repo) => {
+    if (repo) {
+      file.value = await repositoryStore.getFile(path);
+    }
+  },
+  { immediate: true }
+);
 
 useHead({
-  title: () => block.value?.content.title || 'Sem título'
+  title: () => file.value?.name || 'Sem título'
 });
 
-watch(block, async (newBlock) => {
-  if (newBlock !== undefined) await blocksStore.updateBlock(toRaw(newBlock));
-}, { deep: true });
+// watch(block, async (newBlock) => {
+//   if (newBlock !== undefined) await blocksStore.updateBlock(toRaw(newBlock));
+// }, { deep: true });
 
-onMounted(() => {
-  const pageTitle = document.getElementById("page-title") as HTMLInputElement;
-  const pageText = document.getElementById("page-text") as HTMLInputElement;
-  pageTitle!.value = block.value?.content.title ?? '';
-  pageText!.value = block.value?.content.text ?? '';
-  pageText.focus();
+onMounted(async () => {
+  // const pageTitle = document.getElementById("page-title") as HTMLInputElement;
+  // const pageText = document.getElementById("page-text") as HTMLInputElement;
+  // pageTitle!.value = block.value?.content.title ?? '';
+  // pageText!.value = block.value?.content.text ?? '';
+  // pageText.focus();
+  // file.value = await repositoryStore.getFile(path) ?? null;
 });
 </script>
 
 <template>
   <div class="vstack">
-
-    <textarea placeholder="Título..." class="form-control shadow-none p-3 pb-0 border-0 rounded-0 fs-1" style="resize: none; field-sizing: content; min-height: fit-content;" @input="(e) => block!.content.title = (e.target as HTMLInputElement).value" id="page-title"></textarea>
-    <textarea placeholder="Escreva aqui..." class="form-control nowra shadow-none flex-grow-1 p-3 border-0 rounded-0 pb-5" style="resize: none; field-sizing: content; min-height: fit-content;" @input="(e) => block!.content.text = (e.target as HTMLInputElement).value" id="page-text"></textarea>
-
+    <template v-if="file">
+      <TuiEditor :file="file" />
+    </template>
+    <template v-else>
+      <div class="text-center text-muted py-5">Carregando arquivo...</div>
+    </template>
   </div>
 </template>
