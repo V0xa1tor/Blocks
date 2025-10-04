@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const pages = [
-  { icon: "bi-database", title: "Bancos de dados", link: "/settings/database" },
-  { icon: "bi-archive", title: "Espaço utilizado", link: "/settings/storage" },
+  { icon: "bi-archive", title: "Repositórios", link: "/settings/repositories" },
+  { icon: "bi-pie-chart", title: "Espaço utilizado", link: "/settings/storage" },
   { icon: "bi-palette", title: "Customização", link: "/settings/customization" },
   { icon: "bi-lightning-charge", title: "Menu de ações", link: "/settings/actions" },
   { icon: "bi-info-circle", title: "Sobre", link: "/settings/about" }
