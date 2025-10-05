@@ -8,7 +8,7 @@ declare global {
 
 const breadcrumbItems = computed(() => {
   const breadcrumb: breadcrumbItem[] = [];
-  const fullPath = useRouter().currentRoute.value.fullPath;
+  const fullPath = decodeURIComponent(useRouter().currentRoute.value.fullPath);
 
   if (fullPath != '/') {
     const splitedPath = fullPath.slice(1).split('/');

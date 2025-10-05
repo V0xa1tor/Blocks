@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TuiEditor from '~/components/TuiEditor.vue';
 
-const path = useRouter().currentRoute.value.path;
+const path = decodeURIComponent(useRouter().currentRoute.value.path);
 const repositoryStore = useRepositoryStore();
 const file = ref<FSFile | null>(null);
 

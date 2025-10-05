@@ -18,8 +18,14 @@ function hideOffcanvas() {
   if (bsOffcanvas) bsOffcanvas.hide();
 }
 
-async function createNewBlock() {
-  await repositoryStore.repository?.pfs.writeFile("/new-block.md", "# Novo bloco\n\nEscreva aqui...", "utf8");
+async function createFile() {
+  await repositoryStore.repository?.pfs.writeFile("/Novo arquivo.txt", "# Novo bloco\n\nEscreva aqui...", "utf8");
+  await repositoryStore.loadRepositories();
+}
+
+async function createFolder() {
+  await repositoryStore.repository?.pfs.mkdir("/new-folder");
+  await repositoryStore.loadRepositories();
 }
 
 </script>
@@ -35,12 +41,18 @@ async function createNewBlock() {
         <FileTree :nodes="treeData" :id="'tree-root'" />
       </div>
     </div>
-    <div class="p-3">
+    <div class="p-3 hstack gap-2">
       <button
         class="btn btn-outline-primary hstack gap-2 p-1 w-100 justify-content-center"
-        @click="createNewBlock"
+        @click="createFolder"
       >
-        <i class="bi bi-plus-lg"></i>Novo bloco
+        <i class="bi bi-folder"></i>Nova pasta
+      </button>
+      <button
+        class="btn btn-outline-primary hstack gap-2 p-1 w-100 justify-content-center"
+        @click="createFile"
+      >
+        <i class="bi bi-file-earmark-text"></i>Novo arquivo
       </button>
     </div>
   </div>
