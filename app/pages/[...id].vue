@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import TuiEditor from '~/components/TuiEditor.vue';
-
 const path = decodeURIComponent(useRouter().currentRoute.value.path);
 const repositoryStore = useRepositoryStore();
 const file = ref<FSFile | null>(null);
@@ -36,7 +34,8 @@ onMounted(async () => {
 <template>
   <div class="vstack">
     <template v-if="file">
-      <TuiEditor :file="file" />
+      <EditorTitle :file="file" />
+      <EditorContent :file="file" />
     </template>
     <template v-else>
       <div class="text-center text-muted py-5">Carregando arquivo...</div>
