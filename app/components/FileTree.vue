@@ -85,7 +85,7 @@ onUpdated(() => {
 <template>
   <ul class="list-unstyled gap-1 d-flex flex-column user-select-none">
     <template v-for="node in nodes" :key="node.id">
-      <li class="rounded gap-1 d-flex flex-column">
+      <li class="tree-item rounded gap-1 d-flex flex-column">
         <div
           class="file hstack gap-2 align-items-center rounded-2 py-1 px-2"
           @click="!ignoreClick

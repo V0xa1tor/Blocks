@@ -11,6 +11,32 @@ onMounted(async () => {
   await repositoryStore.listAllFilesAndDirs().then(files => {
     treeData.value = files;
   });
+
+new BootstrapMenu('.tree-item', {
+  fetchElementData: (el) => {
+    // Retorna qualquer dado associado ao elemento
+    return { id: el.id, text: el.textContent };
+  },
+  actionsGroups: [
+    ['refresh'],
+    ['delete']
+  ],
+  menuEvent: 'right-click',
+  actions: {
+    refresh: {
+      name: 'Atualizar',
+      iconClass: 'arrow-clockwise',
+      onClick: (data) => alert('Atualizando: ' + data.text)
+    },
+    delete: {
+      name: 'Excluir',
+      iconClass: 'trash',
+      isEnabled: () => false,
+      onClick: (data) => alert('Excluindo: ' + data.text)
+    }
+  }
+});
+
 });
 
 function hideOffcanvas() {

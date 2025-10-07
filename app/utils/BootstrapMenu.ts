@@ -1,6 +1,3 @@
-
-// TypeScript version, Bootstrap 5+, no jQuery, no lodash/classnames
-
 export type BootstrapMenuAction = {
     name: string | ((data: any) => string);
     iconClass?: string;
@@ -39,82 +36,99 @@ function uniqueId(prefix = ''): string {
 }
 
 function renderMenu(menu: BootstrapMenu): HTMLElement {
-    const menuDiv = document.createElement('div');
-    menuDiv.className = 'dropdown bootstrapMenu';
-    menuDiv.style.zIndex = '10000';
-    menuDiv.style.position = 'absolute';
-    menuDiv.style.display = 'none';
+  const menuDiv = document.createElement('div');
+  menuDiv.className = 'dropdown bootstrapMenu';
+  menuDiv.style.zIndex = '10000';
+  menuDiv.style.position = 'absolute';
+  menuDiv.style.display = 'none';
 
-    const ul = document.createElement('ul');
-    ul.className = 'dropdown-menu';
-    ul.style.position = 'static';
-    ul.style.display = 'block';
-    ul.style.fontSize = '0.9em';
+  const ul = document.createElement('ul');
+  ul.className = 'dropdown-menu';
+  ul.style.position = 'static';
+  ul.style.display = 'block';
+  ul.style.fontSize = '0.9em';
 
-    // Group actions
-    const groups: string[][] = [];
-    groups[0] = [];
+  // Agrupa ações
+  const groups: string[][] = [];
+  groups[0] = [];
+  menu.options.actionsGroups?.forEach((groupArr, ind) => {
+    groups[ind + 1] = [];
+  });
+
+  let actionsHaveIcon = false;
+  Object.entries(menu.options.actions).forEach(([actionId, action]) => {
+    let addedToGroup = false;
     menu.options.actionsGroups?.forEach((groupArr, ind) => {
-        groups[ind + 1] = [];
+      if (groupArr.includes(actionId)) {
+        groups[ind + 1]!.push(actionId);
+        addedToGroup = true;
+      }
     });
+    if (!addedToGroup) groups[0]!.push(actionId);
+    if (action.iconClass) actionsHaveIcon = true;
+  });
 
-    let actionsHaveIcon = false;
-    Object.entries(menu.options.actions).forEach(([actionId, action]) => {
-        let addedToGroup = false;
-        menu.options.actionsGroups?.forEach((groupArr, ind) => {
-            if (groupArr.includes(actionId)) {
-                groups[ind + 1]!.push(actionId);
-                addedToGroup = true;
-            }
-        });
-        if (!addedToGroup) groups[0]!.push(actionId);
-        if (action.iconClass) actionsHaveIcon = true;
-    });
+  let hasAnyAction = false;
+  let isFirstNonEmptyGroup = true;
 
-    let isFirstNonEmptyGroup = true;
-    groups.forEach((actionsIds) => {
-        if (actionsIds.length === 0) return;
-        if (!isFirstNonEmptyGroup) {
-            const divider = document.createElement('li');
-            divider.className = 'dropdown-divider';
-            ul.appendChild(divider);
-        }
-        isFirstNonEmptyGroup = false;
-        actionsIds.forEach((actionId) => {
-            const action = menu.options.actions[actionId]!;
-            const li = document.createElement('li');
-            li.setAttribute('role', 'presentation');
-            li.dataset.action = actionId;
-            const a = document.createElement('a');
-            a.setAttribute('role', 'menuitem');
-            a.href = '#';
-            if (actionsHaveIcon) {
-                const i = document.createElement('i');
-                i.className = `bi bi-${action.iconClass || ''}`;
-                a.appendChild(i);
-                a.appendChild(document.createTextNode(' '));
-            }
-            const span = document.createElement('span');
-            span.className = 'actionName';
-            a.appendChild(span);
-            li.appendChild(a);
-            ul.appendChild(li);
-        });
-        // No actions message
-        const noActionsLi = document.createElement('li');
-        noActionsLi.setAttribute('role', 'presentation');
-        noActionsLi.className = 'noActionsMessage disabled';
-        const noActionsA = document.createElement('a');
-        noActionsA.setAttribute('role', 'menuitem');
-        noActionsA.href = '#';
-        const noActionsSpan = document.createElement('span');
-        noActionsSpan.textContent = menu.options.noActionsMessage || '';
-        noActionsA.appendChild(noActionsSpan);
-        noActionsLi.appendChild(noActionsA);
-        ul.appendChild(noActionsLi);
+  groups.forEach((actionsIds) => {
+    if (actionsIds.length === 0) return;
+
+    if (!isFirstNonEmptyGroup) {
+      const divider = document.createElement('li');
+      divider.className = 'dropdown-divider';
+      ul.appendChild(divider);
+    }
+    isFirstNonEmptyGroup = false;
+
+    actionsIds.forEach((actionId) => {
+      const action = menu.options.actions[actionId]!;
+      const li = document.createElement('li');
+      li.setAttribute('role', 'presentation');
+      li.dataset.action = actionId;
+
+      const a = document.createElement('button');
+      a.setAttribute('role', 'menuitem');
+      a.classList.add('dropdown-item');
+      a.type = 'button';
+      
+      if (actionsHaveIcon) {
+        const i = document.createElement('i');
+        i.className = `bi bi-${action.iconClass || ''}`;
+        a.appendChild(i);
+        a.appendChild(document.createTextNode(' '));
+      }
+
+      const span = document.createElement('span');
+      span.className = 'actionName';
+      span.textContent = action.name as string;
+      a.appendChild(span);
+
+      li.appendChild(a);
+      ul.appendChild(li);
+
+      hasAnyAction = true;
     });
-    menuDiv.appendChild(ul);
-    return menuDiv;
+  });
+
+  // 🔧 Agora só mostra a mensagem se realmente não houver nenhuma ação
+  if (!hasAnyAction) {
+    const noActionsLi = document.createElement('li');
+    noActionsLi.setAttribute('role', 'presentation');
+    noActionsLi.className = 'noActionsMessage disabled';
+
+    const noActionsButton = document.createElement('button');
+    noActionsButton.setAttribute('role', 'menuitem');
+
+    const noActionsSpan = document.createElement('span');
+    noActionsSpan.textContent = menu.options.noActionsMessage || 'No available actions';
+    noActionsButton.appendChild(noActionsSpan);
+    noActionsLi.appendChild(noActionsButton);
+    ul.appendChild(noActionsLi);
+  }
+
+  menuDiv.appendChild(ul);
+  return menuDiv;
 }
 
 class BootstrapMenu {
@@ -162,8 +176,9 @@ class BootstrapMenu {
         }
         this.container.addEventListener(openEventName, (evt) => {
             const target = evt.target as HTMLElement;
-            if (!target.matches(this.selector)) return;
-            this.open(target, evt as MouseEvent);
+            const matched = target.closest(this.selector);
+            if (!matched || !(this.container.contains(matched))) return;
+            this.open(matched as HTMLElement, evt as MouseEvent);
             evt.preventDefault();
             evt.stopPropagation();
         });
@@ -219,36 +234,63 @@ class BootstrapMenu {
     };
 
     updatePosition() {
-        let x = 0, y = 0;
-        if (this.options.menuSource === 'element' && this.openTarget) {
-            const rect = this.openTarget.getBoundingClientRect();
-            switch (this.options.menuPosition) {
-                case 'belowRight':
-                    x = rect.right;
-                    y = rect.bottom;
-                    break;
-                case 'belowLeft':
-                    x = rect.left;
-                    y = rect.bottom;
-                    break;
-                case 'aboveRight':
-                    x = rect.right;
-                    y = rect.top - this.menu.offsetHeight;
-                    break;
-                case 'aboveLeft':
-                    x = rect.left;
-                    y = rect.top - this.menu.offsetHeight;
-                    break;
-                default:
-                    throw new Error("Unknown BootstrapMenu 'menuPosition' option");
-            }
-        } else if (this.options.menuSource === 'mouse' && this.openEvent) {
-            x = this.openEvent.clientX;
-            y = this.openEvent.clientY;
-        }
-        this.menu.style.left = `${x}px`;
-        this.menu.style.top = `${y}px`;
+  const menu = this.menu;
+  const evt = this.openEvent;
+  const target = this.openTarget;
+  const { menuSource } = this.options;
+
+  if (!menu) return;
+
+  // Primeiro, definimos posição inicial aproximada
+  let x = 0, y = 0;
+
+  if (menuSource === 'element' && target) {
+    const rect = target.getBoundingClientRect();
+    x = rect.left;
+    y = rect.bottom;
+  } else if (menuSource === 'mouse' && evt) {
+    x = evt.clientX;
+    y = evt.clientY;
+  }
+
+  // Exibe temporariamente para calcular tamanho real
+  menu.style.display = 'block';
+  menu.style.visibility = 'hidden';
+  const menuWidth = menu.offsetWidth;
+  const menuHeight = menu.offsetHeight;
+  menu.style.visibility = '';
+
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  // 🔹 Ajuste horizontal
+  // Se o menu ultrapassar a direita, "vira" para a esquerda
+  if (x + menuWidth > viewportWidth) {
+    x = Math.max(5, viewportWidth - menuWidth - 5);
+  }
+
+  // 🔹 Ajuste vertical
+  // Se o menu ultrapassar a parte de baixo, "vira" para cima
+  if (y + menuHeight > viewportHeight) {
+    // se tiver vindo de elemento, posiciona acima do elemento
+    if (menuSource === 'element' && target) {
+      const rect = target.getBoundingClientRect();
+      y = rect.top - menuHeight;
+    } else {
+      y = Math.max(5, viewportHeight - menuHeight - 5);
     }
+  }
+
+  // 🔹 Garante que nunca vá pra coordenadas negativas
+  if (x < 0) x = 5;
+  if (y < 0) y = 5;
+
+  // 🔹 Aplica coordenadas finais
+  menu.style.left = `${x}px`;
+  menu.style.top = `${y}px`;
+  menu.style.position = 'fixed'; // usa posição relativa à viewport
+}
+
 
     open(target: HTMLElement, event: MouseEvent) {
         BootstrapMenu.closeAll();
@@ -268,10 +310,13 @@ class BootstrapMenu {
             const nameSpan = li.querySelector('.actionName') as HTMLElement;
             nameSpan.textContent = typeof action.name === 'function' ? action.name(data) : action.name;
             // Set enabled/disabled
+            const button = li.querySelector('.dropdown-item') as HTMLElement;
             if (action.isEnabled && !action.isEnabled(data)) {
                 li.classList.add('disabled');
+                button.classList.add('disabled');
             } else {
                 li.classList.remove('disabled');
+                button.classList.remove('disabled');
             }
             // Set custom classes
             if (action.classNames) {
@@ -281,10 +326,12 @@ class BootstrapMenu {
         });
         // No actions message
         const noActionsMsg = this.menu.querySelector('.noActionsMessage') as HTMLElement;
-        if (numShown === 0) {
-            noActionsMsg.style.display = '';
-        } else {
-            noActionsMsg.style.display = 'none';
+        if (noActionsMsg) {
+            if (numShown === 0) {
+                noActionsMsg.style.display = '';
+            } else {
+                noActionsMsg.style.display = 'none';
+            }
         }
         this.updatePosition();
         this.menu.style.display = 'block';
