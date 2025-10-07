@@ -180,6 +180,32 @@ export const useRepositoryStore = defineStore("repository", () => {
     };
   }
 
+  async function removeRecursively(path: string) {
+  try {
+    // Tenta ler a pasta
+    const files = await repository.value?.pfs.readdir(path)!;
+
+    // Se conseguir ler, é uma pasta: percorre os arquivos/subpastas
+    for (const file of files) {
+      await removeRecursively(`${path}/${file}`);
+    }
+
+    // Após esvaziar, remove a pasta
+    await repository.value?.pfs.rmdir(path);
+  } catch (err: any) {
+    if (err.code === 'ENOTDIR') {
+      // Não é uma pasta, então é arquivo: remove com unlink
+      await repository.value?.pfs.unlink(path);
+    } else if (err.code === 'ENOENT') {
+      // Arquivo/pasta não existe, ignora
+      return;
+    } else {
+      throw err; // outros erros
+    }
+  }
+}
+
+
   return {
     repositories,
     repository,
@@ -191,6 +217,7 @@ export const useRepositoryStore = defineStore("repository", () => {
     exportRepositoryZip,
     importRepositoryZip,
     listAllFilesAndDirs,
-    getFile
+    getFile,
+    removeRecursively
   };
 });

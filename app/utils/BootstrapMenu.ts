@@ -2,14 +2,14 @@ export type BootstrapMenuAction = {
     name: string | ((data: any) => string);
     iconClass?: string;
     classNames?: string | ((data: any) => string);
-    isShown?: (data: any) => boolean;
-    isEnabled?: (data: any) => boolean;
-    onClick: (data: any) => void;
+    isShown?: (data: any) => Promise<boolean> | boolean;
+    isEnabled?: (data: any) => Promise<boolean> | boolean;
+    onClick: (data: any) => Promise<void> | void;
 };
 
 export type BootstrapMenuOptions = {
     container?: HTMLElement | string;
-    fetchElementData?: (el: HTMLElement) => any;
+    fetchElementData?: (el: HTMLElement) => Promise<any> | any;
     menuSource?: 'mouse' | 'element';
     menuPosition?: 'aboveLeft' | 'aboveRight' | 'belowLeft' | 'belowRight';
     menuEvent?: 'click' | 'right-click' | 'hover';
@@ -36,100 +36,64 @@ function uniqueId(prefix = ''): string {
 }
 
 function renderMenu(menu: BootstrapMenu): HTMLElement {
-  const menuDiv = document.createElement('div');
-  menuDiv.className = 'dropdown bootstrapMenu';
-  menuDiv.style.zIndex = '10000';
-  menuDiv.style.position = 'absolute';
-  menuDiv.style.display = 'none';
+    const menuDiv = document.createElement('div');
+    menuDiv.className = 'dropdown bootstrapMenu';
+    menuDiv.style.zIndex = '10000';
+    menuDiv.style.position = 'absolute';
+    menuDiv.style.display = 'none';
 
-  const ul = document.createElement('ul');
-  ul.className = 'dropdown-menu';
-  ul.style.position = 'static';
-  ul.style.display = 'block';
-  ul.style.fontSize = '0.9em';
+    const ul = document.createElement('ul');
+    ul.className = 'dropdown-menu';
+    ul.style.position = 'static';
+    ul.style.display = 'block';
+    ul.style.fontSize = '0.9em';
 
-  // Agrupa ações
-  const groups: string[][] = [];
-  groups[0] = [];
-  menu.options.actionsGroups?.forEach((groupArr, ind) => {
-    groups[ind + 1] = [];
-  });
+    let actionsHaveIcon = false;
 
-  let actionsHaveIcon = false;
-  Object.entries(menu.options.actions).forEach(([actionId, action]) => {
-    let addedToGroup = false;
-    menu.options.actionsGroups?.forEach((groupArr, ind) => {
-      if (groupArr.includes(actionId)) {
-        groups[ind + 1]!.push(actionId);
-        addedToGroup = true;
-      }
+    // Cria cada ação como <li data-action>
+    Object.entries(menu.options.actions).forEach(([actionId, action]) => {
+        const li = document.createElement('li');
+        li.setAttribute('role', 'presentation');
+        li.dataset.action = actionId;
+
+        const button = document.createElement('button');
+        button.setAttribute('role', 'menuitem');
+        button.classList.add('dropdown-item');
+        button.type = 'button';
+
+        if (action.iconClass) {
+            actionsHaveIcon = true;
+            const i = document.createElement('i');
+            i.className = `bi bi-${action.iconClass} pe-1`;
+            button.appendChild(i);
+            button.appendChild(document.createTextNode(' '));
+        }
+
+        const span = document.createElement('span');
+        span.className = 'actionName';
+        span.textContent = typeof action.name === 'function' ? '' : action.name; // será atualizado no open
+        button.appendChild(span);
+
+        li.appendChild(button);
+        ul.appendChild(li);
     });
-    if (!addedToGroup) groups[0]!.push(actionId);
-    if (action.iconClass) actionsHaveIcon = true;
-  });
 
-  let hasAnyAction = false;
-  let isFirstNonEmptyGroup = true;
-
-  groups.forEach((actionsIds) => {
-    if (actionsIds.length === 0) return;
-
-    if (!isFirstNonEmptyGroup) {
-      const divider = document.createElement('li');
-      divider.className = 'dropdown-divider';
-      ul.appendChild(divider);
-    }
-    isFirstNonEmptyGroup = false;
-
-    actionsIds.forEach((actionId) => {
-      const action = menu.options.actions[actionId]!;
-      const li = document.createElement('li');
-      li.setAttribute('role', 'presentation');
-      li.dataset.action = actionId;
-
-      const a = document.createElement('button');
-      a.setAttribute('role', 'menuitem');
-      a.classList.add('dropdown-item');
-      a.type = 'button';
-      
-      if (actionsHaveIcon) {
-        const i = document.createElement('i');
-        i.className = `bi bi-${action.iconClass || ''}`;
-        a.appendChild(i);
-        a.appendChild(document.createTextNode(' '));
-      }
-
-      const span = document.createElement('span');
-      span.className = 'actionName';
-      span.textContent = action.name as string;
-      a.appendChild(span);
-
-      li.appendChild(a);
-      ul.appendChild(li);
-
-      hasAnyAction = true;
-    });
-  });
-
-  // 🔧 Agora só mostra a mensagem se realmente não houver nenhuma ação
-  if (!hasAnyAction) {
+    // No actions message
     const noActionsLi = document.createElement('li');
     noActionsLi.setAttribute('role', 'presentation');
     noActionsLi.className = 'noActionsMessage disabled';
-
     const noActionsButton = document.createElement('button');
     noActionsButton.setAttribute('role', 'menuitem');
-
     const noActionsSpan = document.createElement('span');
     noActionsSpan.textContent = menu.options.noActionsMessage || 'No available actions';
     noActionsButton.appendChild(noActionsSpan);
     noActionsLi.appendChild(noActionsButton);
     ul.appendChild(noActionsLi);
-  }
 
-  menuDiv.appendChild(ul);
-  return menuDiv;
+    menuDiv.appendChild(ul);
+    return menuDiv;
 }
+
 
 class BootstrapMenu {
     static existingInstances: BootstrapMenu[] = [];
@@ -174,11 +138,11 @@ class BootstrapMenu {
             case 'hover': openEventName = 'mouseenter'; break;
             default: throw new Error("Unknown BootstrapMenu 'menuEvent' option");
         }
-        this.container.addEventListener(openEventName, (evt) => {
+        this.container.addEventListener(openEventName, async (evt) => {
             const target = evt.target as HTMLElement;
             const matched = target.closest(this.selector);
             if (!matched || !(this.container.contains(matched))) return;
-            this.open(matched as HTMLElement, evt as MouseEvent);
+            await this.open(matched as HTMLElement, evt as MouseEvent);
             evt.preventDefault();
             evt.stopPropagation();
         });
@@ -190,13 +154,13 @@ class BootstrapMenu {
 
     setupActionsEventListeners() {
         const eventType = this.options._actionSelectEvent || 'click';
-        this.menu.addEventListener(eventType, (evt) => {
+        this.menu.addEventListener(eventType, async (evt) => {
             const target = evt.target as HTMLElement;
             const actionLi = target.closest('[data-action]') as HTMLElement;
             if (!actionLi || actionLi.classList.contains('disabled')) return;
             const actionId = actionLi.dataset.action!;
-            const data = this.options.fetchElementData?.(this.openTarget!);
-            this.options.actions[actionId]!.onClick(data);
+            const data = await this.options.fetchElementData?.(this.openTarget!);
+            await this.options.actions[actionId]!.onClick(data);
             this.close();
             evt.preventDefault();
             evt.stopPropagation();
@@ -292,51 +256,82 @@ class BootstrapMenu {
 }
 
 
-    open(target: HTMLElement, event: MouseEvent) {
-        BootstrapMenu.closeAll();
-        this.openTarget = target;
-        this.openEvent = event;
-        const data = this.options.fetchElementData?.(this.openTarget);
-        // Show/hide actions
-        let numShown = 0;
-        this.menu.querySelectorAll('[data-action]').forEach((li) => {
-            const actionId = (li as HTMLElement).dataset.action!;
-            const action = this.options.actions[actionId]!;
-            let show = true;
-            if (action.isShown && !action.isShown(data)) show = false;
-            (li as HTMLElement).style.display = show ? '' : 'none';
-            if (show) numShown++;
-            // Set name
-            const nameSpan = li.querySelector('.actionName') as HTMLElement;
-            nameSpan.textContent = typeof action.name === 'function' ? action.name(data) : action.name;
-            // Set enabled/disabled
-            const button = li.querySelector('.dropdown-item') as HTMLElement;
-            if (action.isEnabled && !action.isEnabled(data)) {
-                li.classList.add('disabled');
-                button.classList.add('disabled');
-            } else {
-                li.classList.remove('disabled');
-                button.classList.remove('disabled');
-            }
-            // Set custom classes
-            if (action.classNames) {
-                const classes = typeof action.classNames === 'function' ? action.classNames(data) : action.classNames;
-                li.className = `${li.className} ${classes}`;
-            }
-        });
-        // No actions message
-        const noActionsMsg = this.menu.querySelector('.noActionsMessage') as HTMLElement;
-        if (noActionsMsg) {
-            if (numShown === 0) {
-                noActionsMsg.style.display = '';
-            } else {
-                noActionsMsg.style.display = 'none';
-            }
+async open(target: HTMLElement, event: MouseEvent) {
+    BootstrapMenu.closeAll();
+    this.openTarget = target;
+    this.openEvent = event;
+    const data = await this.options.fetchElementData?.(this.openTarget);
+
+    const actionLis = Array.from(this.menu.querySelectorAll('[data-action]')) as HTMLElement[];
+    let numShown = 0;
+
+    // Determina quais ações devem aparecer
+    for (const li of actionLis) {
+        const actionId = li.dataset.action!;
+        const action = this.options.actions[actionId]!;
+
+        let show = true;
+        if (action.isShown) show = await action.isShown(data);
+        li.style.display = show ? '' : 'none';
+        if (show) numShown++;
+
+        const nameSpan = li.querySelector('.actionName') as HTMLElement;
+        nameSpan.textContent = typeof action.name === 'function' ? action.name(data) : action.name;
+
+        const button = li.querySelector('.dropdown-item') as HTMLElement;
+        if (action.isEnabled) {
+            const enabled = await action.isEnabled(data);
+            li.classList.toggle('disabled', !enabled);
+            button.classList.toggle('disabled', !enabled);
         }
-        this.updatePosition();
-        this.menu.style.display = 'block';
-        this.setupCloseEventListeners();
+
+        if (action.classNames) {
+            const classes = typeof action.classNames === 'function' ? action.classNames(data) : action.classNames;
+            li.className = `${li.className} ${classes}`;
+        }
     }
+
+    // Remove dividers antigos
+    this.menu.querySelectorAll('.dropdown-divider').forEach(div => div.remove());
+
+    // Monta os grupos incluindo o grupo 0 (ações sem grupo)
+    const groups: string[][] = [];
+    groups[0] = []; // grupo 0 = ações sem grupo
+    const definedGroups = this.options.actionsGroups || [];
+    definedGroups.forEach((g, i) => groups[i + 1] = g.slice());
+
+    // Preenche grupo 0 com ações não presentes em nenhum grupo
+    const allGrouped = new Set(definedGroups.flat());
+    Object.keys(this.options.actions).forEach(id => {
+        if (!allGrouped.has(id)) groups[0]!.push(id);
+    });
+
+    // Adiciona dividers dinamicamente entre grupos visíveis
+    let firstDividerInserted = false;
+    for (const group of groups) {
+        const visibleInGroup = group
+            .map(id => this.menu.querySelector(`[data-action="${id}"]`) as HTMLElement)
+            .filter(li => li && li.style.display !== 'none');
+
+        if (visibleInGroup.length > 0) {
+            if (firstDividerInserted) {
+                const divider = document.createElement('li');
+                divider.className = 'dropdown-divider';
+                visibleInGroup[0]!.parentNode!.insertBefore(divider, visibleInGroup[0]!);
+            }
+            firstDividerInserted = true;
+        }
+    }
+
+    // No actions message
+    const noActionsMsg = this.menu.querySelector('.noActionsMessage') as HTMLElement;
+    if (noActionsMsg) noActionsMsg.style.display = numShown === 0 ? '' : 'none';
+
+    this.updatePosition();
+    this.menu.style.display = 'block';
+    this.setupCloseEventListeners();
+}
+
 
     close() {
         this.menu.style.display = 'none';

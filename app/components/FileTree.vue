@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import Sortable, { MultiDrag } from 'sortablejs';
+import Sortable from 'sortablejs';
 
-// Busca recursiva do node pela name e type
-function findNodeByName(nodes: FSItem[], name: string): FSItem | undefined {
-  for (const node of nodes) {
-    if (node.name === name && node.type === 'dir') return node;
-    if (node.children) {
-      const found = findNodeByName(node.children, name);
+// Busca recursiva do item pela name e type
+function findItemByName(items: FSItem[], name: string): FSItem | undefined {
+  for (const item of items) {
+    if (item.name === name && item.type === 'dir') return item;
+    if (item.children) {
+      const found = findItemByName(item.children, name);
       if (found) return found;
     }
   }
@@ -15,15 +15,15 @@ function findNodeByName(nodes: FSItem[], name: string): FSItem | undefined {
 // Flag para ignorar clique após drag
 let ignoreClick = false;
 
-const props = defineProps<{ nodes: FSItem[] }>();
+const props = defineProps<{ items: FSItem[] }>();
 const emit = defineEmits(['toggle-folder']);
 
-function toggleFolder(node: FSItem) {
+function toggleFolder(item: FSItem) {
   // Garante reatividade usando Vue.set se necessário
-  node.collapsed = !node.collapsed;
+  item.collapsed = !item.collapsed;
   // Não emite para cima, pois o estado é local e recursivo
   // Espera renderização e aplica sortable na pasta expandida correta
-  if (node.type === 'dir' && !node.collapsed && node.children) {
+  if (item.type === 'dir' && !item.collapsed && item.children) {
     nextTick(() => setupSortable('tree'));
   }
 }
@@ -31,7 +31,7 @@ function toggleFolder(node: FSItem) {
 function setupSortable(id: string) {
   setTimeout(() => {
     // Aplica SortableJS em todos os ul.list-unstyled
-    const allUls = document.querySelectorAll('ul.list-unstyled');
+  const allUls = document.querySelectorAll('ul.list-unstyled');
     allUls.forEach((el) => {
       if (!el.classList.contains('sortable-initialized')) {
         Sortable.create(el as HTMLElement, {
@@ -46,11 +46,11 @@ function setupSortable(id: string) {
             ignoreClick = true;
             // Fecha pasta ao iniciar drag
             const item = evt.item;
-            // Encontra o node correspondente
-            const nodeName = item.querySelector('.fw-bold')?.textContent;
-            if (nodeName) {
-              const node = findNodeByName(props.nodes, nodeName!);
-              if (node && node.collapsed === false) node.collapsed = true;
+            // Encontra o item correspondente
+            const itemName = item.querySelector('.fw-bold')?.textContent;
+            if (itemName) {
+              const item = findItemByName(props.items, itemName!);
+              if (item && item.collapsed === false) item.collapsed = true;
             }
           },
           onEnd() {
@@ -83,26 +83,29 @@ onUpdated(() => {
 </script>
 
 <template>
-  <ul class="list-unstyled gap-1 d-flex flex-column user-select-none">
-    <template v-for="node in nodes" :key="node.id">
-      <li class="tree-item rounded gap-1 d-flex flex-column">
+  <ul class="list-unstyled gap-1 d-flex flex-column user-select-none m-0">
+    <template v-for="item in items" :key="item.id">
+      <li
+        class="tree-item rounded gap-1 d-flex flex-column"
+        :data-path="item.path"
+      >
         <div
           class="file hstack gap-2 align-items-center rounded-2 py-1 px-2"
           @click="!ignoreClick
-          ? (node.type === 'dir' ? toggleFolder(node) : navigateTo(node.path))
+          ? (item.type === 'dir' ? toggleFolder(item) : navigateTo(item.path))
           : null"
         >
-          <template v-if="node.type === 'dir'">
-            <i class="text-body-tertiary" :class="node.collapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'" style="font-size:1.2em"></i>
-            <span class="flex-grow-1 text-truncate">{{ node.name }}</span>
+          <template v-if="item.type === 'dir'">
+            <i class="text-body-tertiary" :class="item.collapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-down'" style="font-size:1.2em"></i>
+            <span class="flex-grow-1 text-truncate">{{ item.name }}</span>
           </template>
           <template v-else>
             <i class="bi bi-file-earmark-text" style="font-size:1.2em"></i>
-            <span class="flex-grow-1 text-truncate">{{ node.name }}</span>
+            <span class="flex-grow-1 text-truncate">{{ item.name }}</span>
           </template>
         </div>
-        <ul v-if="node.type === 'dir' && !node.collapsed && node.children && node.children.length > 0" class="list-unstyled ms-3">
-          <FileTree :nodes="node.children" @toggle-folder="toggleFolder" />
+        <ul v-if="item.type === 'dir' && !item.collapsed && item.children && item.children.length > 0" class="list-unstyled ms-3">
+          <FileTree :items="item.children" @toggle-folder="toggleFolder" />
         </ul>
       </li>
     </template>
