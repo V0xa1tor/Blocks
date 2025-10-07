@@ -20,7 +20,8 @@ async function renameFile() {
 
   try {
     await repositoryStore.repository?.pfs.rename(props.file.path, newPath);
-    useRouter().replace(newPath);
+    window.history.replaceState({}, '', newPath);
+    await repositoryStore.loadRepositories();
   } catch(e) {
     alert(`Não foi possível renomear o arquivo "${props.file.path}" para "${newPath}".\nCaractere não permitido.`);
     editorTitle.value!.value = props.file.name;

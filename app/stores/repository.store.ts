@@ -53,6 +53,7 @@ export const useRepositoryStore = defineStore("repository", () => {
     setRepository(name);
 
     await loadRepositories();
+    return { name, fs, pfs: fs.promises } as FsInstance;
   }
 
   function setRepository(name: string | null) {
@@ -61,7 +62,7 @@ export const useRepositoryStore = defineStore("repository", () => {
 
   async function deleteRepository(name: string) {
     indexedDB.deleteDatabase(name);
-    setRepository(null);
+    if (repositoryName.value === name) setRepository(null);
     await loadRepositories();
   }
 
@@ -95,15 +96,14 @@ export const useRepositoryStore = defineStore("repository", () => {
 
   /** Importa um ZIP para dentro do FS */
   async function importRepositoryZip(name: string, zipBlob: Blob) {
-    const instance = repositories.value.find(f => f.name === name);
-    if (!instance) return;
+    const fs = new LightningFS(name);
 
     const zip = await JSZip.loadAsync(zipBlob);
 
     for (const [path, entry] of Object.entries(zip.files)) {
       if (entry.dir) {
         try {
-          await instance.pfs.mkdir("/" + path);
+          await fs.promises.mkdir("/" + path);
         } catch {}
       } else {
         const content = await (entry as JSZip.JSZipObject).async("string");
@@ -113,12 +113,14 @@ export const useRepositoryStore = defineStore("repository", () => {
         for (const d of dirs) {
           acc += "/" + d;
           try {
-            await instance.pfs.mkdir(acc);
+            await fs.promises.mkdir(acc);
           } catch {}
         }
-        await instance.pfs.writeFile("/" + path, content, "utf8");
+        await fs.promises.writeFile("/" + path, content, "utf8");
       }
     }
+    setRepository(name);
+    await loadRepositories();
   }
 
   async function renameRepository(oldName: string, newName: string) {
@@ -128,6 +130,7 @@ export const useRepositoryStore = defineStore("repository", () => {
     if (zip) {
       await importRepositoryZip(newName, zip);
     }
+    await loadRepositories();
   }
 
   /**
@@ -203,6 +206,7 @@ export const useRepositoryStore = defineStore("repository", () => {
       throw err; // outros erros
     }
   }
+  await loadRepositories();
 }
 
 

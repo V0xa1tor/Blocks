@@ -31,6 +31,15 @@ async function exportRepository(name: string) {
 }
 
 function importRepository(files: FileList | null) {
+  if (!files || !files.length) return;
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]!;
+    if (file.name.endsWith('.zip')) {
+      repositoryStore.importRepositoryZip(file.name.slice(0, file.name.length - 4), file);
+    } else {
+      alert(`O arquivo "${file.name}" não é um arquivo .zip válido.`);
+    }
+  }
 }
 
 async function createNewRepository(name: string) {

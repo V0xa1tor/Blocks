@@ -4,13 +4,15 @@ import * as bootstrap from "bootstrap";
 const repositoryStore = useRepositoryStore();
 
 const treeData = ref<FSItem[]>([]);
+watch(() => repositoryStore.repository, async (newRepo) => {
+  if (newRepo) {
+    treeData.value = await repositoryStore.listAllFilesAndDirs();
+  } else {
+    treeData.value = [];
+  }
+}, { immediate: true });
 
 onMounted(async () => {
-  await repositoryStore.loadRepositories();
-  await repositoryStore.listAllFilesAndDirs().then(files => {
-    treeData.value = files;
-  });
-
 new BootstrapMenu('[data-path]', {
   fetchElementData: async (el) => {
     const path = el.dataset.path;
@@ -80,7 +82,7 @@ async function createFolder(path: string) {
     </div>
     <div data-path="/" class="offcanvas-body vstack gap-3">
       <div id="offcanvas-blocks" class="vstack gap-1">
-        <FileTree :items="treeData" :id="'tree-root'" />
+        <FileTree :items="treeData" />
       </div>
     </div>
     <div class="p-3 hstack gap-2">
